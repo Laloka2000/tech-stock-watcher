@@ -3,7 +3,7 @@ export interface Quote {
     ticker: string;
     price: number;
     change: number;
-    changePct: number;
+    percentChange: number;
     high: number;
     low: number;
     prevClose: number;
@@ -90,7 +90,7 @@ export interface ApiProfileResponse {
     fetchedAt: string;
 }
 
-export type ChartRange = "1W" | "1M" | "3M" | "6M" | "1Y" | "5Y" | "MAX";
+export type ChartRange = "1W" | "1M" | "3M" | "6M" | "1Y" | "5Y";
 
 export type Sentiment = "bullish" | "neutral" | "bearish";
 

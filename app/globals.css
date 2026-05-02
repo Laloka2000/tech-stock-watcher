@@ -1,27 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilites;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  *, *::before, *::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  html {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    background-color: #070c09;
+    color: #e8f2e8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
   }
+
+  body {
+    min-height: 100%;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb{ background: #1c2a1e; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #243428; }
+
+  .font-mono {font-variant-numeric: tabular-nums;}
+}
+
+@layer utilites {
+  .text-balance { text-wrap: balance; }
 }

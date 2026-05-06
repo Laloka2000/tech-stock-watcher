@@ -15,7 +15,7 @@ import type { ChartPoint, ChartRange } from "@/types/stock";
 const BASE_URL = "https://www.alphavantage.co/query";
 
 function getKey(): string {
-    const apiKey = process.env.ALPHAVANTAGE_API_KEY;
+    const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
     if (!apiKey) throw new Error("ALPHAVANTAGE_API_KEY not set");
     return apiKey;
 }

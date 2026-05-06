@@ -6,6 +6,7 @@ export interface Quote {
     percentChange: number;
     high: number;
     low: number;
+    open: number;
     prevClose: number;
     volume: number;
     timestamp: number;

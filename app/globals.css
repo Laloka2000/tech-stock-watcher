@@ -2,7 +2,7 @@
 
 @tailwind base;
 @tailwind components;
-@tailwind utilites;
+@tailwind utilities;
 
 @layer base {
   *, *::before, *::after{
@@ -33,6 +33,6 @@
   .font-mono {font-variant-numeric: tabular-nums;}
 }
 
-@layer utilites {
+@layer utilities {
   .text-balance { text-wrap: balance; }
 }

@@ -56,6 +56,7 @@ export async function fetchQuote(ticker: string): Promise<Quote>{
         percentChange: rawData.percentChange,
         high: rawData.high,
         low: rawData.low,
+        open: rawData.open,
         prevClose: rawData.previousClose,
         volume: 0, 
         timestamp: rawData.timeStamp,

@@ -29,7 +29,7 @@ export function useQuotes(tickers: string[]) {
     );
 
     return {
-        qoutes: data?.quotes ?? {},
+        quotes: data?.quotes ?? {},
         fetchedAt: data?.fetchedAt,
         loading: isLoading, 
         error,
@@ -44,7 +44,7 @@ export function useQuote(ticker: string, quotes: Record<string, Quote>) {
 
 // Chart
 export function useChart(ticker: string | null, range: ChartRange = "1Y"){
-    const key = ticker ? `/api/chart${ticker}?range=${range}` : null;
+    const key = ticker ? `/api/chart/${ticker}?range=${range}` : null;
 
     const {data, error, isLoading} = useSWR<ApiChartResponse>(key, apiFetcher, {
         revalidateOnFocus: false,

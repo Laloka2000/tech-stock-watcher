@@ -39,7 +39,7 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
     const [range, setRange] = useState<ChartRange>("1M");
 
     const { tickers, addTickers, removeTickers, hasTickers, hydrated } = useWatchlist();
-    const { quotes, loading: qLoading, refresh } = useQuotes(hydrated ? tickers : []);
+    const { quotes, refresh } = useQuotes(hydrated ? tickers : []);
     const { points, loading: chartLoading } = useChart(ticker, range);
     const { profile, fundamentals, loading: pLoading } = useProfile(ticker);
 

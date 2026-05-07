@@ -6,7 +6,7 @@ import type { WatchlistEntry } from "@/types/stock";
 const storage_key = "tp_watchlist";
 
 const default_tickers: string[] = [
-    "NVDA", "GOOGL", "MSFT", "AAPL", "META", "AMD", "TSLA", "AMZN", "NFLX", "TSM"
+    "NVDA", "GOOGL", "MSFT", "AAPL", "META", "AMZN", 
 ];
 
 function readStorage(): WatchlistEntry[] {

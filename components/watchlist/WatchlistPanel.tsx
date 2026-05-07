@@ -34,7 +34,7 @@ export function WatchlistPanel({tickers, quotes, charts, profiles, loading, onAd
     return (
         <>
             {/** Sidebar */}
-            <aside className="w-[272pc] flex-shrink-0 flex flex-col border-r border-tp-border bg-tp-surf">
+            <aside className="w-[272px] flex-shrink-0 flex flex-col border-r border-tp-border bg-tp-surf">
                 {/** Header */}
                 <div className="px-5 py-5 border-b border-tp-border flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-tp-accent/10 border border-tp-accent/25 flex items-center justify-center flex-shrink-0">

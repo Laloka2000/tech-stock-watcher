@@ -1,35 +1,58 @@
 /**
  * GET /api/profile/[ticker]
- * 
- * Returns company profile (Finnhub) + financial fundamentals (FMP).
- * Source: Finnhub profile + FMP ratios (both free tier)
- * Cache: server-side in-memory 24h 
+ *
+ * Returns company profile + fundamentals.
+ * Source: Finnhub profile + Finnhub /stock/metric (FMP-t kivettük, 403-at adott)
+ * Cache: server-side in-memory 24h
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { fetchProfile } from "@/lib/api/finnhub";
-import { fetchFundamentals } from "@/lib/api/fmp";
+import { fetchProfile, fetchMetrics } from "@/lib/api/finnhub";
 import { cache } from "@/lib/cache";
 import type { ApiProfileResponse } from "@/types/stock";
 
-export const runTime = "nodejs";
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const TTL = 86400;
 
-export async function GET(_req: NextRequest,{params}: {params: {ticker: string}}) {
+export async function GET(
+    _req: NextRequest,
+    { params }: { params: { ticker: string } }
+) {
     const ticker = params.ticker.toUpperCase();
     const cacheKey = `profile:${ticker}`;
 
     try {
-        const data = await cache.getOrFetch<{profile: ApiProfileResponse["profile"]; fundamentals: ApiProfileResponse["fundamentals"]}>(
+        const data = await cache.getOrFetch<{
+            profile: ApiProfileResponse["profile"];
+            fundamentals: ApiProfileResponse["fundamentals"];
+        }>(
             cacheKey,
             async () => {
-                const [profile, fundamentals] = await Promise.all([
+                const [profile, metrics] = await Promise.all([
                     fetchProfile(ticker),
-                    fetchFundamentals(ticker),
+                    fetchMetrics(ticker),
                 ]);
-                return {profile, fundamentals};
+
+                const fundamentals: ApiProfileResponse["fundamentals"] = {
+                    ticker,
+                    marketCap: metrics.marketCapitalization
+                        ? metrics.marketCapitalization * 1e6
+                        : profile.marketCap,
+                    pe: metrics.peBasicExclExtraTTM ?? null,
+                    eps: metrics.epsBasicExclExtraItemsAnnual ?? null,
+                    beta: metrics.beta ?? null,
+                    w52High: metrics["52WeekHigh"] ?? null,
+                    w52Low: metrics["52WeekLow"] ?? null,
+                    averageVolume: null,
+                    divYield: metrics.dividendYieldIndicatedAnnual ?? null,
+                    roe: metrics.roeTTM ?? null,
+                    debtToEq: metrics["totalDebt/totalEquityAnnual"] ?? null,
+                    revenueGrowYoY: metrics.revenueGrowthTTMYoy ?? null,
+                };
+
+                return { profile, fundamentals };
             },
             TTL
         );
@@ -46,12 +69,11 @@ export async function GET(_req: NextRequest,{params}: {params: {ticker: string}}
                 "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
             },
         });
-
-    } catch (error){
-        console.error(`[/api/profile/${ticker}]`, error);
+    } catch (err) {
+        console.error(`[/api/profile/${ticker}]`, err);
         return NextResponse.json(
-            {error: "Failed to fetched profile", detail: String(error)},
-            {status: 502}
+            { error: "Failed to fetch profile", detail: String(err) },
+            { status: 502 }
         );
     }
 }

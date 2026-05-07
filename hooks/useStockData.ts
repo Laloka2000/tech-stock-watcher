@@ -28,6 +28,9 @@ export function useQuotes(tickers: string[]) {
         }
     );
 
+    console.log("SWR data:", data);
+    console.log("SWR error:", error);
+
     return {
         quotes: data?.quotes ?? {},
         fetchedAt: data?.fetchedAt,

@@ -1,6 +1,7 @@
-import {Quote, CompanyProfile} from "@/types/stock";
+import { Quote, CompanyProfile } from "@/types/stock";
 
 const BASE_URL = "https://finnhub.io/api/v1";
+const TIMEOUT_MS = 10_000;
 
 function getKey(): string {
     const apiKey = process.env.FINNHUB_API_KEY;
@@ -10,85 +11,112 @@ function getKey(): string {
 
 async function finnhubFetch<T>(path: string): Promise<T> {
     const url = `${BASE_URL}${path}&token=${getKey()}`;
-    const result = await fetch(url, {next: {revalidate: 60}});
-    if (!result.ok) {
-        throw new Error(`Finnhub ${result.status}: ${path}`);
+
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    try {
+        const res = await fetch(url, {
+            signal: controller.signal,
+            next: { revalidate: 60 },
+        });
+        if (!res.ok) throw new Error(`Finnhub ${res.status}: ${path}`);
+        return res.json() as Promise<T>;
+    } catch (err: unknown) {
+        if (err instanceof Error && err.name === "AbortError")
+            throw new Error(`Finnhub timeout: ${path}`);
+        throw err;
+    } finally {
+        clearTimeout(tid);
     }
-    return result.json() as Promise<T>;
 }
 
-// Raw shapes from Finnhub
+// --- Raw shapes ---
 
 interface FinnhubQuote {
-    currentPrice: number;
-    change: number;
-    percentChange: number;
-    high: number;
-    low: number;
-    open: number;
-    previousClose: number;
-    timeStamp: number;
+    c: number;   // current price
+    d: number;   // change
+    dp: number;  // percent change
+    h: number;   // high
+    l: number;   // low
+    o: number;   // open
+    pc: number;  // previous close
+    t: number;   // timestamp
 }
 
 interface FinnhubProfile {
     country: string;
-    currency: string;
     exchange: string;
-    ipo: string;
-    marketCapitalization: number;
     name: string;
-    phone: string;
     shareOutstanding: number;
     ticker: string;
     weburl: string;
     logo: string;
     finnhubIndustry: string;
+    marketCapitalization: number;
 }
 
-// Public helper functions
-
-export async function fetchQuote(ticker: string): Promise<Quote>{
-    const rawData = await finnhubFetch<FinnhubQuote>(`/qoute?symbol=${ticker}`);
-    return {
-        ticker,
-        price: rawData.currentPrice,
-        change: rawData.change,
-        percentChange: rawData.percentChange,
-        high: rawData.high,
-        low: rawData.low,
-        open: rawData.open,
-        prevClose: rawData.previousClose,
-        volume: 0, 
-        timestamp: rawData.timeStamp,
+interface FinnhubMetrics {
+    metric: {
+        "52WeekHigh"?: number;
+        "52WeekLow"?: number;
+        beta?: number;
+        epsBasicExclExtraItemsAnnual?: number;
+        peBasicExclExtraTTM?: number;
+        dividendYieldIndicatedAnnual?: number;
+        roeTTM?: number;
+        "totalDebt/totalEquityAnnual"?: number;
+        revenueGrowthTTMYoy?: number;
+        marketCapitalization?: number;
     };
 }
 
-/** Fetch multiple qoutes. Finnhub doesn't have a batch endpoint on free tier
- * so we fan out in parallel (within the 60 req/min budget).
- */
-export async function fetchQuotes(ticker: string[]): Promise<Record<string, Quote>> {
-    const fetchResults = await Promise.allSettled(ticker.map(fetchQuote));
+// --- Public helpers ---
+
+export async function fetchQuote(ticker: string): Promise<Quote> {
+    const raw = await finnhubFetch<FinnhubQuote>(`/quote?symbol=${ticker}`);
+    return {
+        ticker,
+        price: raw.c,
+        change: raw.d,
+        percentChange: raw.dp,
+        high: raw.h,
+        low: raw.l,
+        open: raw.o,
+        prevClose: raw.pc,
+        volume: 0,
+        timestamp: raw.t,
+    };
+}
+
+/** Finnhub nincs batch quote endpoint a free tier-en, párhuzamosan kérjük le */
+export async function fetchQuotes(tickers: string[]): Promise<Record<string, Quote>> {
+    const results = await Promise.allSettled(tickers.map(fetchQuote));
     const out: Record<string, Quote> = {};
-    fetchResults.forEach((result, i) => {
-        if (result.status === "fulfilled") out[ticker[i]] = result.value;
+    results.forEach((r, i) => {
+        if (r.status === "fulfilled") out[tickers[i]] = r.value;
     });
     return out;
 }
 
 export async function fetchProfile(ticker: string): Promise<CompanyProfile> {
-    const rawData = await finnhubFetch<FinnhubProfile>(
-        `/stock/profile2?symbol=${ticker}`
-    );
+    const raw = await finnhubFetch<FinnhubProfile>(`/stock/profile2?symbol=${ticker}`);
     return {
         ticker,
-        name: rawData.name ?? ticker,
-        sector: rawData.finnhubIndustry ?? "Technology",
-        industry: rawData.finnhubIndustry ?? "Technology",
-        country: rawData.country ?? "US",
-        exchange: rawData.exchange ?? "",
-        logo: rawData.logo ?? "",
-        websiteUrl: rawData.weburl ?? "",
-        marketCap: (rawData.marketCapitalization ?? 0) * 1e6,
-        shareOutstanding: rawData.shareOutstanding ?? 0,
+        name: raw.name ?? ticker,
+        sector: raw.finnhubIndustry ?? "Technology",
+        industry: raw.finnhubIndustry ?? "Technology",
+        country: raw.country ?? "US",
+        exchange: raw.exchange ?? "",
+        logo: raw.logo ?? "",
+        websiteUrl: raw.weburl ?? "",
+        marketCap: (raw.marketCapitalization ?? 0) * 1e6,
+        shareOutstanding: raw.shareOutstanding ?? 0,
     };
+}
+
+/** Basic financials — P/E, EPS, Beta, 52w high/low, stb. (FMP helyett) */
+export async function fetchMetrics(ticker: string): Promise<FinnhubMetrics["metric"]> {
+    const raw = await finnhubFetch<FinnhubMetrics>(`/stock/metric?symbol=${ticker}&metric=all`);
+    return raw.metric ?? {};
 }

@@ -50,7 +50,6 @@ export interface ChartPoint {
 }
 
 // Compose view model
-/** Everything the UI needs for a stock cart / list row */
 export interface StockSummary {
     ticker: string;
     name: string;
@@ -62,7 +61,6 @@ export interface StockSummary {
     sparkline: number[];
 }
 
-/** Full stock detail (qoute + profile + fundamentals + chart) */
 export interface StockDetail extends StockSummary {
     profile: CompanyProfile;
     fundamentals: Fundamentals;
@@ -70,7 +68,7 @@ export interface StockDetail extends StockSummary {
     chartRange: ChartRange;
 }
 
-// API Response shapes 
+// API Response shapes
 
 export interface ApiQoutesResponse {
     quotes: Record<string, Quote>;
@@ -91,7 +89,8 @@ export interface ApiProfileResponse {
     fetchedAt: string;
 }
 
-export type ChartRange = "1W" | "1M" | "3M" | "6M" | "1Y" | "5Y";
+// Csak compact outputsize-szal elérhető range-ek (free tier)
+export type ChartRange = "1W" | "1M" | "3M";
 
 export type Sentiment = "bullish" | "neutral" | "bearish";
 

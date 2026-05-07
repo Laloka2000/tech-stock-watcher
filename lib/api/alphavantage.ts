@@ -1,86 +1,93 @@
 /**
- * Alpha Vantage API client
- * Docs: https://www.alphavantage.co/documentation/
- * Free tier: 25 req / day  ← TREAT THIS AS PRECIOUS
- * Used for: daily OHLCV chart data only
+ * Yahoo Finance chart API — Alpha Vantage helyett
  *
- * Strategy:
- *  - Cache every response server-side for 24 hours
- *  - Only request "compact" output (last 100 data points) unless 6M/1Y needed
- *  - Never call from the browser — always through /api/chart route handler
+ * Előnyök:
+ *  - Teljesen ingyenes, nincs API kulcs
+ *  - Nincs napi limit, nincs per-second korlát
+ *  - Megbízható historikus napi adat
  */
 
 import type { ChartPoint, ChartRange } from "@/types/stock";
 
-const BASE_URL = "https://www.alphavantage.co/query";
+const BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart";
+const TIMEOUT_MS = 10_000;
 
-function getKey(): string {
-    const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
-    if (!apiKey) throw new Error("ALPHAVANTAGE_API_KEY not set");
-    return apiKey;
-}
-
-// Raw response shape
-interface AVDailyResponse {
-    "Meta Data": {
-        "1. Information": string;
-        "2. Symbol": string;
-        "3. Last Refreshed": string;
-        "4. Output size": string;
-        "5. Time Zone": string;
-    };
-    "Time Series (Daily)": Record<string, {
-        "1. open": string;
-        "2. high": string;
-        "3. low": string;
-        "4. close": string;
-        "5. volume": string;
-    }
-    >;
-}
-
-/** Map ChartRange to the number of trading days to return */
-const RANGE_DAYS: Record<ChartRange, number> = {
-    "1W": 7,
-    "1M": 30,
-    "3M": 90,
-    "6M": 180,
-    "1Y": 365,
-    "5Y": 1825,
+const YAHOO_RANGE: Record<ChartRange, string> = {
+    "1W": "5d",
+    "1M": "1mo",
+    "3M": "3mo",
 };
 
-export async function fetchDailyChart(ticker: string, range: ChartRange = "1Y"): Promise<ChartPoint[]> {
-    const outPutSize = RANGE_DAYS[range] > 100 ? "full" : "compact";
-    const url = new URL(BASE_URL);
-    url.searchParams.set("function", "TIME_SERIES_DAILY");
-    url.searchParams.set("symbol", ticker);
-    url.searchParams.set("outputsize", outPutSize);
-    url.searchParams.set("apikey", getKey());
+interface YahooChartResponse {
+    chart: {
+        result?: Array<{
+            timestamp: number[];
+            indicators: {
+                quote: Array<{
+                    open: (number | null)[];
+                    high: (number | null)[];
+                    low: (number | null)[];
+                    close: (number | null)[];
+                    volume: (number | null)[];
+                }>;
+            };
+        }>;
+        error?: { code: string; description: string };
+    };
+}
 
-    const result = await fetch(url.toString(), {
-        next: {revalidate: 86400},
-    });
+export async function fetchDailyChart(
+    ticker: string,
+    range: ChartRange = "1M"
+): Promise<ChartPoint[]> {
+    const yahooRange = YAHOO_RANGE[range];
+    const url = `${BASE_URL}/${ticker}?interval=1d&range=${yahooRange}`;
 
-    const data: AVDailyResponse = await result.json();
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
-    if (!data["Time Series (Daily)"]) {
-        const note = (data as unknown as Record<string, unknown>)["Note"] as string | undefined;
-        const info = (data as unknown as Record<string, unknown>)["Information"] as string | undefined;
-        throw new Error(
-            note ?? info ?? `Aplha Vantage ${result.status}: ${ticker}`
-        );
+    let res: Response;
+    try {
+        res = await fetch(url, {
+            signal: controller.signal,
+            headers: { "User-Agent": "Mozilla/5.0" },
+            next: { revalidate: 86400 },
+        });
+    } catch (err: unknown) {
+        if (err instanceof Error && err.name === "AbortError")
+            throw new Error(`Yahoo Finance timeout for ${ticker}`);
+        throw err;
+    } finally {
+        clearTimeout(tid);
     }
 
-    const options = data["Time Series (Daily)"];
-    const days = RANGE_DAYS[range];
+    if (!res.ok) throw new Error(`Yahoo Finance HTTP ${res.status} for ${ticker}`);
 
-    const points: ChartPoint[] = Object.entries(options).sort(([a], [b]) => a.localeCompare(b)).slice(-days).map(([date, v]) => ({
-        date, 
-        open: parseFloat(v["1. open"]),
-        high: parseFloat(v["2. high"]),
-        low: parseFloat(v["3. low"]),
-        close: parseFloat(v["4. close"]),
-        volume: parseInt(v["5. volume"], 10),
-    }));
+    const data: YahooChartResponse = await res.json();
+
+    if (data.chart.error)
+        throw new Error(`Yahoo Finance hiba: ${data.chart.error.description}`);
+
+    const result = data.chart.result?.[0];
+    if (!result) throw new Error(`Yahoo Finance: nincs adat ${ticker}-hez`);
+
+    const { timestamp, indicators } = result;
+    const quote = indicators.quote[0];
+    const points: ChartPoint[] = [];
+
+    for (let i = 0; i < timestamp.length; i++) {
+        const close = quote.close[i];
+        const open  = quote.open[i];
+        const high  = quote.high[i];
+        const low   = quote.low[i];
+        if (close == null || open == null || high == null || low == null) continue;
+
+        points.push({
+            date: new Date(timestamp[i] * 1000).toISOString().split("T")[0],
+            open, high, low, close,
+            volume: quote.volume[i] ?? 0,
+        });
+    }
+
     return points;
 }

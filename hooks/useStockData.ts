@@ -2,8 +2,6 @@
 
 import useSWR from "swr";
 import type { ApiQoutesResponse, ApiChartResponse, ApiProfileResponse, ChartRange, Quote } from "@/types/stock";
-import { use } from "react";
-import { profile } from "console";
 
 const apiFetcher = (url: string) => fetch(url).then((res) => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -46,7 +44,7 @@ export function useQuote(ticker: string, quotes: Record<string, Quote>) {
 }
 
 // Chart
-export function useChart(ticker: string | null, range: ChartRange = "1Y"){
+export function useChart(ticker: string | null, range: ChartRange = "3M"){
     const key = ticker ? `/api/chart/${ticker}?range=${range}` : null;
 
     const {data, error, isLoading} = useSWR<ApiChartResponse>(key, apiFetcher, {

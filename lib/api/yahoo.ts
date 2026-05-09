@@ -1,11 +1,11 @@
 /**
- * Yahoo Finance chart API — Alpha Vantage helyett
- *
- * Előnyök:
- *  - Teljesen ingyenes, nincs API kulcs
- *  - Nincs napi limit, nincs per-second korlát
- *  - Megbízható historikus napi adat
- */
+* Yahoo Finance chart API — instead of Alpha Vantage
+*
+* Benefits:
+* - Completely free, no API key
+* - No daily limit, no per-second limit
+* - Reliable historical daily data
+*/
 
 import type { ChartPoint, ChartRange } from "@/types/stock";
 

@@ -2,12 +2,12 @@
  * GET /api/chart/[ticker]?range=1M
  *
  * Returns daily OHLCV data for a ticker.
- * Source: Alpha Vantage (25 req/day free) — csak compact (1W/1M/3M)
+ * Source: Yahoo finance — csak compact (1W/1M/3M)
  * Cache: server-side in-memory 24h
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { fetchDailyChart } from "@/lib/api/alphavantage";
+import { fetchDailyChart } from "@/lib/api/yahoo";
 import { cache } from "@/lib/cache";
 import type { ApiChartResponse, ChartRange } from "@/types/stock";
 

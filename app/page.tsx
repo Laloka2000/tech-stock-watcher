@@ -119,7 +119,7 @@ console.log("quotes:", quotes);
               {hydrated ? `${tickers.length} stocks · ` : ""}
               {error
                 ? <span className="text-tp-red">⚠ {error.message}</span>
-                : "Live via Finnhub · Alpha Vantage · FMP"}
+                : "Live via Finnhub · Yahoo Finance"}
             </p>
           </div>
           <div className="flex-1" />

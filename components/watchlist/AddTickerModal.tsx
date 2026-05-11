@@ -8,41 +8,80 @@ interface AddTickerModalProps {
     hasTicker: (ticker: string) => boolean;
 }
 
-export function AddTickerModal({ onAdd, onClose, hasTicker}: AddTickerModalProps) {
+type Status = "idle" | "validating" | "error" | "ok";
+
+export function AddTickerModal({ onAdd, onClose, hasTicker }: AddTickerModalProps) {
     const [value, setValue] = useState("");
     const [error, setError] = useState("");
+    const [status, setStatus] = useState<Status>("idle");
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         const ticker = value.toUpperCase().trim();
+
         if (!ticker) return;
+
         if (!/^[A-Z]{1,5}$/.test(ticker)) {
-            setError("Enter a valid US ticker (1-5 letter)");
+            setError("Érvényes US ticker szükséges (1–5 betű)");
             return;
         }
-        if (hasTicker(ticker)){
-            setError(`${ticker} is already in your watchlist`);
+
+        if (hasTicker(ticker)) {
+            setError(`${ticker} már szerepel a watchlisteden`);
             return;
         }
-        onAdd(ticker);
-        onClose();
+
+        // Check if the ticker actually exists
+        setStatus("validating");
+        setError("");
+
+        try {
+            const res = await fetch(`/api/profile/${ticker}`);
+
+            if (!res.ok) {
+                setStatus("error");
+                setError(`„${ticker}" not found — check ticker symbol`);
+                return;
+            }
+
+            const data = await res.json();
+
+            // Finnhub returns empty profile for non-existent tickers
+            // name AND exchange are both empty/missing — we check both
+            const validProfile = !!(data?.profile?.name && data?.profile?.exchange);
+            if (!validProfile) {
+                setStatus("error");
+                setError(`"${ticker}" unknown stock symbol`);
+                return;
+            }
+
+            // All reasons — add
+            setStatus("ok");
+            onAdd(ticker);
+            onClose();
+        } catch {
+            setStatus("error");
+            setError("Hálózati hiba — próbáld újra");
+        }
     }
+
+    const isValidating = status === "validating";
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
-            {/** Backdrop */}
+            {/* Backdrop */}
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-            {/** Modal */}
+            {/* Modal */}
             <form
                 onSubmit={handleSubmit}
                 onClick={(e) => e.stopPropagation()}
-                className="relative z-10 bg-tp-surf border border-top-border rounded-2xl p-6 w-full max-w-sm animate-slide-in"
+                className="relative z-10 bg-tp-surf border border-tp-border rounded-2xl p-6 w-full max-w-sm animate-slide-in"
             >
                 <div className="flex items-center justify-between mb-5">
                     <h2 className="font-mono text-sm font-bold text-tp-primary tracking-wide">
@@ -61,36 +100,50 @@ export function AddTickerModal({ onAdd, onClose, hasTicker}: AddTickerModalProps
                     <label className="block text-[10px] text-tp-muted uppercase tracking-widest mb-2">
                         Ticker Symbol
                     </label>
-                    <input 
+                    <input
                         ref={inputRef}
                         type="text"
                         value={value}
-                        onChange={(e) => {setValue(e.target.value.toUpperCase()); setError("");}}
-                        placeholder="e.g NVDA"
+                        onChange={(e) => {
+                            setValue(e.target.value.toUpperCase());
+                            setError("");
+                            setStatus("idle");
+                        }}
+                        placeholder="e.g. NVDA"
                         maxLength={5}
-                        className="w-full bg-tp-card border border-tp-border rounded-lg px-4 py-3 font-mono text-sm text-tp-primary placeholder-tp-muted focus:outline-none focus:border-tp-accent/60 transition-colors uppercase"
+                        disabled={isValidating}
+                        className="w-full bg-tp-card border border-tp-border rounded-xl px-4 py-3 font-mono text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50 focus:ring-1 focus:ring-tp-accent/20 transition-all disabled:opacity-50"
                     />
-                    {error && (
-                        <p className="text-tp-red text-xs mt-1.5 font-mono">{error}</p>
-                    )}
                 </div>
 
-                <div className="flex gap-2">
-                    <button 
-                        type="button"
-                        onClick={onClose}
-                        className="flex-1 px-4 py-2.5 rounded-lg border border-tp-border text-tp-muted text-sm font-medium hover:bg-white/[0.04] transition-colors"
-                    >
-                        Cancel
-                    </button>
-                    <button 
-                        type="submit"
-                        className="flex-1 px-4 py-2.5 rounded-lg bg-tp-accent/15 border border-tp-accent/40 text-tp-accent text-sm font-bold font-mono hover:bg-tp-accent/20 transition-colors"
-                    >
-                        Add {value || "Ticker"}
-                    </button>
-                </div>
-            </form> 
+                {/* Error message */}
+                {error && (
+                    <div className="mb-4 px-3 py-2.5 bg-tp-red/10 border border-tp-red/30 rounded-xl flex items-start gap-2">
+                        <span className="text-tp-red text-xs mt-0.5">⚠</span>
+                        <p className="text-tp-red text-xs leading-relaxed">{error}</p>
+                    </div>
+                )}
+
+                {/* Validation in progress */}
+                {isValidating && (
+                    <div className="mb-4 px-3 py-2.5 bg-tp-accent/5 border border-tp-accent/20 rounded-xl flex items-center gap-2">
+                        <div className="w-3 h-3 border border-tp-accent border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                        <p className="text-tp-accent text-xs">Checking: {value}...</p>
+                    </div>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={isValidating || !value}
+                    className="w-full py-2.5 rounded-xl bg-tp-accent/10 border border-tp-accent/40 text-tp-accent text-xs font-mono font-bold tracking-wide hover:bg-tp-accent/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    {isValidating ? "Checking..." : "Adding"}
+                </button>
+
+                <p className="mt-3 text-center text-[10px] text-tp-muted">
+                    US market ticker symbols (pl. AAPL, TSLA, MSFT)
+                </p>
+            </form>
         </div>
     );
 }

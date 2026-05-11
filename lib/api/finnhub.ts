@@ -89,7 +89,7 @@ export async function fetchQuote(ticker: string): Promise<Quote> {
     };
 }
 
-/** Finnhub nincs batch quote endpoint a free tier-en, párhuzamosan kérjük le */
+/** Finnhub does not have a batch quote endpoint on the free tier, please request it in parallel */
 export async function fetchQuotes(tickers: string[]): Promise<Record<string, Quote>> {
     const results = await Promise.allSettled(tickers.map(fetchQuote));
     const out: Record<string, Quote> = {};
@@ -103,7 +103,7 @@ export async function fetchProfile(ticker: string): Promise<CompanyProfile> {
     const raw = await finnhubFetch<FinnhubProfile>(`/stock/profile2?symbol=${ticker}`);
     return {
         ticker,
-        name: raw.name ?? ticker,
+        name: raw.name ?? "",
         sector: raw.finnhubIndustry ?? "Technology",
         industry: raw.finnhubIndustry ?? "Technology",
         country: raw.country ?? "US",
@@ -115,7 +115,7 @@ export async function fetchProfile(ticker: string): Promise<CompanyProfile> {
     };
 }
 
-/** Basic financials — P/E, EPS, Beta, 52w high/low, stb. (FMP helyett) */
+/** Basic financials — P/E, EPS, Beta, 52w high/low, etc. (instead of FMP) */
 export async function fetchMetrics(ticker: string): Promise<FinnhubMetrics["metric"]> {
     const raw = await finnhubFetch<FinnhubMetrics>(`/stock/metric?symbol=${ticker}&metric=all`);
     return raw.metric ?? {};

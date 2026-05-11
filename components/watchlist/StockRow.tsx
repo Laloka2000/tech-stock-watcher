@@ -66,6 +66,10 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
                 </div>
             </div>
 
+            <div className="flex-shrink-0">
+                <Sparkline data={sparkData} width={60} height={28} color={changeColor} />
+            </div>
+
 
             {/* Remove — only on desktop hover */}
             <button

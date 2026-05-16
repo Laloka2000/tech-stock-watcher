@@ -37,7 +37,7 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
         <Link
             href={`/stock/${ticker}`}
             style={{ minHeight: "64px" }}
-            className={`group flex items-center gap-3 px-4 py-3.5 transition-all border-l-2 active:bg-white/[0.05] hover:bg-white/[0.03] ${
+            className={`group flex items-center gap-1 px-2.5 py-3.5 transition-all border-l-2 active:bg-white/[0.05] hover:bg-white/[0.03] ${
                 active ? "border-tp-accent bg-tp-accent/[0.06]" : "border-transparent"
             }`}
         >

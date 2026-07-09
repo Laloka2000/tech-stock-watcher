@@ -26,7 +26,6 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
     const pct = quote.percentChange ?? 0;
     const up = pct >= 0;
     const changeColor = up ? "#00e68e" : "#ff5252";
-    // If no chart data, synthetic OHLC sparkline
     const sparkData = chart.length > 0
         ? chart.map((p) => p.close)
         : up
@@ -41,7 +40,6 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
                 active ? "border-tp-accent bg-tp-accent/[0.06]" : "border-transparent"
             }`}
         >
-            {/* Avatar */}
             <div className="w-9 h-9 rounded-xl bg-tp-border flex items-center justify-center overflow-hidden flex-shrink-0">
                 {logo ? (
                     <Image src={logo} alt={ticker} width={36} height={36} className="object-contain" unoptimized />
@@ -50,7 +48,6 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
                 )}
             </div>
 
-            {/* Ticker + price */}
             <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 mb-0.5">
                     <span className="font-mono text-[14px] font-bold text-tp-primary">{ticker}</span>
@@ -71,7 +68,6 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
             </div>
 
 
-            {/* Remove — only on desktop hover */}
             <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(ticker); }}
                 className="hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity text-tp-muted hover:text-tp-red text-xs p-1.5 rounded-lg flex-shrink-0 items-center justify-center"

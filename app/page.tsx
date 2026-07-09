@@ -27,7 +27,6 @@ function StockCard({ ticker, quote, sparkData, onRemove }: {
       href={`/stock/${ticker}`}
       className="group bg-tp-card border border-tp-border rounded-2xl p-5 hover:border-tp-accent/30 hover:bg-tp-card/80 transition-all block"
     >
-      {/* Header row: ticker + price | remove button */}
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="font-mono text-base font-bold text-tp-primary">{ticker}</div>
@@ -47,7 +46,6 @@ function StockCard({ ticker, quote, sparkData, onRemove }: {
         </button>
       </div>
 
-      {/* Sparkline */}
       <div className="mb-4">
         <Sparkline
           data={sparkData.map((p) => p.close)}
@@ -57,7 +55,6 @@ function StockCard({ ticker, quote, sparkData, onRemove }: {
         />
       </div>
 
-      {/* Footer row: change badge | high/low */}
       {quote ? (
         <div className="flex items-center justify-between">
           <ChangeBadge value={quote.percentChange} />
@@ -86,10 +83,6 @@ export default function DashboardPage() {
   const gainers = quotedTickers.filter((t) => quotes[t].percentChange> 0).length;
   const losers  = quotedTickers.filter((t) => quotes[t].percentChange < 0).length;
 
-  // IDEIGLENES DEBUG — töröld el ha megvan a hiba
-console.log("hydrated:", hydrated);
-console.log("tickers:", tickers);
-console.log("quotes:", quotes);
 
   return (
     <div className="flex h-screen overflow-hidden bg-tp-bg">
@@ -107,9 +100,7 @@ console.log("quotes:", quotes);
         onRefresh={refresh}
       />
 
-      {/* Main content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Topbar */}
         <header className="flex items-center px-8 py-4 border-b border-tp-border bg-tp-surf flex-shrink-0">
           <div>
             <h1 className="font-mono text-sm font-bold text-tp-primary tracking-wide">
@@ -137,23 +128,19 @@ console.log("quotes:", quotes);
           )}
         </header>
 
-        {/* Stock grid */}
         <div className="flex-1 overflow-y-auto p-8">
           {!hydrated ? (
-            // Skeleton placeholders while localStorage hydrates
             <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="bg-tp-card border border-tp-border rounded-2xl p-5 h-[172px] animate-shimmer bg-[linear-gradient(90deg,#1c2a1e_25%,#243428_50%,#1c2a1e_75%)] bg-[length:200%_100%]" />
               ))}
             </div>
           ) : tickers.length === 0 ? (
-            // Empty state
             <div className="flex flex-col items-center justify-center h-64 text-center">
               <div className="text-tp-muted font-mono text-sm mb-2">Your watchlist is empty</div>
               <p className="text-tp-muted text-xs">Use + Add Ticker in the sidebar to get started</p>
             </div>
           ) : (
-            // Stock cards
             <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
               {tickers.map((ticker) => (
                 <StockCard

@@ -8,7 +8,6 @@ const apiFetcher = (url: string) => fetch(url).then((res) => {
     return res.json();
 })
 
-// Batch Quotes
 
 /** Polls all quotes for a list of tickers every 60 seconds. 
  * Backed by Finnhub via /api/quotes.
@@ -26,9 +25,6 @@ export function useQuotes(tickers: string[]) {
         }
     );
 
-    console.log("SWR data:", data);
-    console.log("SWR error:", error);
-
     return {
         quotes: data?.quotes ?? {},
         fetchedAt: data?.fetchedAt,
@@ -38,12 +34,10 @@ export function useQuotes(tickers: string[]) {
     };
 }
 
-/** Single qoute for a given ticker (derived from batch quotes) */
 export function useQuote(ticker: string, quotes: Record<string, Quote>) {
     return quotes[ticker] ?? null;
 }
 
-// Chart
 export function useChart(ticker: string | null, range: ChartRange = "3M"){
     const key = ticker ? `/api/chart/${ticker}?range=${range}` : null;
 
@@ -60,7 +54,6 @@ export function useChart(ticker: string | null, range: ChartRange = "3M"){
     };
 }
 
-// Profile + fundamentals
 export function useProfile(ticker: string | null) {
     const key = ticker ? `/api/profile/${ticker}` : null;
 

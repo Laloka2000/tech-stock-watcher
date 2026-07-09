@@ -5,6 +5,7 @@ import { useQuotes } from "@/hooks/useStockData";
 import { WatchlistPanel } from "@/components/watchlist/WatchlistPanel";
 import { ChangeBadge } from "@/components/ui";
 import { Sparkline } from "@/components/charts/Sparkline";
+import { AuthStatus } from "@/components/auth/AuthStatus";
 import Link from "next/link";
 import type { ChartPoint, Quote } from "@/types/stock";
 
@@ -86,7 +87,6 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-tp-bg">
-      {/* Sidebar */}
       <WatchlistPanel
         tickers={tickers}
         quotes={quotes}
@@ -115,7 +115,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex-1" />
           {quotedTickers.length > 0 && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mr-4">
               <div className="flex items-center gap-1.5 text-xs font-mono">
                 <span className="w-2 h-2 rounded-full bg-tp-accent" />
                 <span className="text-tp-sec">{gainers} up</span>
@@ -126,6 +126,7 @@ export default function DashboardPage() {
               </div>
             </div>
           )}
+          <AuthStatus />
         </header>
 
         <div className="flex-1 overflow-y-auto p-8">

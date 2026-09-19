@@ -25,7 +25,7 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
 
     const pct = quote.percentChange ?? 0;
     const up = pct >= 0;
-    const changeColor = up ? "#00e68e" : "#ff5252";
+    const changeColor = up ? "#1F6F5C" : "#AC4B2F";
     const sparkData = chart.length > 0
         ? chart.map((p) => p.close)
         : up
@@ -36,41 +36,40 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
         <Link
             href={`/stock/${ticker}`}
             style={{ minHeight: "64px" }}
-            className={`group flex items-center gap-1 px-2.5 py-3.5 transition-all border-l-2 active:bg-white/[0.05] hover:bg-white/[0.03] ${
-                active ? "border-tp-accent bg-tp-accent/[0.06]" : "border-transparent"
+            className={`group flex items-center gap-2.5 px-5 py-3.5 border-b border-tp-line/60 border-l-2 transition-colors active:bg-tp-ink/[0.03] hover:bg-tp-ink/[0.02] ${
+                active ? "border-l-tp-teal bg-tp-teal/[0.05]" : "border-l-transparent"
             }`}
         >
-            <div className="w-9 h-9 rounded-xl bg-tp-border flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-8 h-8 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center overflow-hidden flex-shrink-0">
                 {logo ? (
-                    <Image src={logo} alt={ticker} width={36} height={36} className="object-contain" unoptimized />
+                    <Image src={logo} alt={ticker} width={32} height={32} className="object-contain" unoptimized />
                 ) : (
-                    <span className="text-[11px] font-mono font-bold text-tp-sec">{ticker.slice(0, 2)}</span>
+                    <span className="text-[10px] font-mono font-semibold text-tp-ink2">{ticker.slice(0, 2)}</span>
                 )}
             </div>
 
             <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 mb-0.5">
-                    <span className="font-mono text-[14px] font-bold text-tp-primary">{ticker}</span>
+                    <span className="font-mono text-[13px] font-semibold text-tp-ink">{ticker}</span>
                     {sector && (
-                        <span className="text-[10px] text-tp-muted truncate hidden sm:block">{sector}</span>
+                        <span className="text-[10px] text-tp-ink2 truncate hidden sm:block">{sector}</span>
                     )}
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="font-mono text-[13px] text-tp-sec">${fmt(quote.price)}</span>
-                    <span className="font-mono text-[12px] font-bold" style={{ color: changeColor }}>
+                    <span className="font-mono text-[12px] text-tp-ink2">${fmt(quote.price)}</span>
+                    <span className="font-mono text-[12px] font-semibold" style={{ color: changeColor }}>
                         {up ? "+" : ""}{pct.toFixed(2)}%
                     </span>
                 </div>
             </div>
 
             <div className="flex-shrink-0">
-                <Sparkline data={sparkData} width={60} height={28} color={changeColor} />
+                <Sparkline data={sparkData} width={56} height={26} color={changeColor} />
             </div>
-
 
             <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(ticker); }}
-                className="hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity text-tp-muted hover:text-tp-red text-xs p-1.5 rounded-lg flex-shrink-0 items-center justify-center"
+                className="hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity text-tp-ink2 hover:text-tp-rust text-xs p-1.5 rounded-sm flex-shrink-0 items-center justify-center"
                 aria-label={`Remove ${ticker}`}
             >
                 ✕

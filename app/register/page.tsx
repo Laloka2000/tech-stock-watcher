@@ -51,19 +51,19 @@ export default function RegisterPage() {
 
     if (submitted) {
         return (
-            <div className="flex h-screen items-center justify-center bg-tp-bg px-4">
-                <div className="w-full max-w-sm bg-tp-card border border-tp-border rounded-2xl p-8 text-center">
-                    <div className="text-tp-accent text-2xl mb-3">✓</div>
-                    <h1 className="font-mono text-base font-bold text-tp-primary mb-2">
+            <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
+                <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8 text-center">
+                    <div className="text-tp-teal text-2xl mb-3">✓</div>
+                    <h1 className="font-serif text-lg font-semibold text-tp-ink mb-2">
                         Nézd meg az emailjeidet
                     </h1>
-                    <p className="text-xs text-tp-muted">
-                        Küldtünk egy megerősítő linket a(z) <span className="text-tp-sec">{email}</span> címre.
+                    <p className="text-[13px] text-tp-ink2">
+                        Küldtünk egy megerősítő linket a(z) <span className="text-tp-ink">{email}</span> címre.
                         A fiókod aktiválásához kattints a linkre.
                     </p>
                     <Link
                         href="/login"
-                        className="inline-block mt-6 text-xs text-tp-accent hover:underline"
+                        className="inline-block mt-6 text-[13px] text-tp-teal hover:underline"
                     >
                         ← Vissza a bejelentkezéshez
                     </Link>
@@ -73,18 +73,18 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="flex h-screen items-center justify-center bg-tp-bg px-4">
-            <div className="w-full max-w-sm bg-tp-card border border-tp-border rounded-2xl p-8">
-                <h1 className="font-mono text-lg font-bold text-tp-primary mb-1">
+        <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
+            <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
+                <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
                     Regisztráció
                 </h1>
-                <p className="text-xs text-tp-muted mb-6">
+                <p className="text-[13px] text-tp-ink2 mb-6">
                     Hozz létre fiókot a perzisztens watchlisthez és az alertekhez
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label htmlFor="email" className="block text-[11px] text-tp-sec mb-1.5 uppercase tracking-wide">
+                        <label htmlFor="email" className="block text-[11px] text-tp-ink2 mb-1.5">
                             Email
                         </label>
                         <input
@@ -94,13 +94,13 @@ export default function RegisterPage() {
                             autoComplete="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50"
+                            className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
                             placeholder="te@pelda.hu"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-[11px] text-tp-sec mb-1.5 uppercase tracking-wide">
+                        <label htmlFor="password" className="block text-[11px] text-tp-ink2 mb-1.5">
                             Jelszó
                         </label>
                         <input
@@ -111,13 +111,13 @@ export default function RegisterPage() {
                             minLength={MIN_PASSWORD_LENGTH}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50"
+                            className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
                             placeholder="••••••••"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="confirmPassword" className="block text-[11px] text-tp-sec mb-1.5 uppercase tracking-wide">
+                        <label htmlFor="confirmPassword" className="block text-[11px] text-tp-ink2 mb-1.5">
                             Jelszó megerősítése
                         </label>
                         <input
@@ -127,13 +127,13 @@ export default function RegisterPage() {
                             autoComplete="new-password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50"
+                            className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
                             placeholder="••••••••"
                         />
                     </div>
 
                     {error && (
-                        <p className="text-xs text-tp-red bg-tp-red/10 border border-tp-red/20 rounded-lg px-3 py-2">
+                        <p className="text-xs text-tp-rust bg-tp-rust/[0.08] border border-tp-rust/20 rounded-sm px-3 py-2">
                             {error}
                         </p>
                     )}
@@ -141,15 +141,15 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-tp-accent text-tp-bg font-mono text-sm font-bold rounded-lg py-2.5 hover:shadow-accent-glow transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? "Regisztráció..." : "Regisztráció"}
                     </button>
                 </form>
 
-                <p className="text-xs text-tp-muted mt-6 text-center">
+                <p className="text-[13px] text-tp-ink2 mt-6 text-center">
                     Már van fiókod?{" "}
-                    <Link href="/login" className="text-tp-accent hover:underline">
+                    <Link href="/login" className="text-tp-teal hover:underline">
                         Bejelentkezés
                     </Link>
                 </p>

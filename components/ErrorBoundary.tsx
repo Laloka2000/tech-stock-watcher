@@ -32,19 +32,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
             if (this.props.fallback) return this.props.fallback;
 
             return (
-                <div className="flex flex-col items-center justify-center h-screen bg-tp-bg gap-6 p-8">
-                    <div className="w-14 h-14 rounded-2xl bg-tp-red/10 border border-tp-red/30 flex items-center justify-center text-2xl">
+                <div className="flex flex-col items-center justify-center h-screen bg-tp-paper gap-6 p-8">
+                    <div className="w-14 h-14 rounded-sm bg-tp-rust/10 border border-tp-rust/30 flex items-center justify-center text-2xl">
                         ⚠
                     </div>
                     <div className="text-center max-w-sm">
-                        <h2 className="font-mono text-sm font-bold text-tp-primary mb-2">
-                            Something went wrong...
+                        <h2 className="font-serif text-lg font-semibold text-tp-ink mb-2">
+                            Something went wrong
                         </h2>
-                        <p className="text-[11px] text-tp-muted leading-relaxed mb-1">
-                            The application encountered an unexpected error.
+                        <p className="text-[13px] text-tp-ink2 leading-relaxed mb-1">
+                            The application ran into an unexpected error.
                         </p>
                         {this.state.message && (
-                            <p className="text-[10px] text-tp-red/70 font-mono mt-2 bg-tp-red/5 border border-tp-red/20 rounded-lg px-3 py-2">
+                            <p className="text-[11px] text-tp-rust/80 font-mono mt-2 bg-tp-rust/[0.05] border border-tp-rust/20 rounded-sm px-3 py-2">
                                 {this.state.message}
                             </p>
                         )}
@@ -54,7 +54,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
                             this.setState({ hasError: false, message: "" });
                             window.location.reload();
                         }}
-                        className="px-5 py-2.5 rounded-xl border border-tp-accent/40 text-tp-accent bg-tp-accent/5 hover:bg-tp-accent/10 text-xs font-mono font-bold transition-all"
+                        className="px-5 py-2.5 rounded-sm border border-tp-teal/40 text-tp-teal bg-tp-teal/5 hover:bg-tp-teal/10 text-xs font-mono font-semibold transition-all"
                     >
                         ↻ Reload
                     </button>

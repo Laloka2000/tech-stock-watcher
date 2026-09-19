@@ -32,18 +32,18 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex h-screen items-center justify-center bg-tp-bg px-4">
-            <div className="w-full max-w-sm bg-tp-card border border-tp-border rounded-2xl p-8">
-                <h1 className="font-mono text-lg font-bold text-tp-primary mb-1">
+        <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
+            <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
+                <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
                     Bejelentkezés
                 </h1>
-                <p className="text-xs text-tp-muted mb-6">
+                <p className="text-[13px] text-tp-ink2 mb-6">
                     TechPulse — a watchlist eléréséhez jelentkezz be
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label htmlFor="email" className="block text-[11px] text-tp-sec mb-1.5 uppercase tracking-wide">
+                        <label htmlFor="email" className="block text-[11px] text-tp-ink2 mb-1.5">
                             Email
                         </label>
                         <input
@@ -53,13 +53,13 @@ export default function LoginPage() {
                             autoComplete="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50"
+                            className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
                             placeholder="te@pelda.hu"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-[11px] text-tp-sec mb-1.5 uppercase tracking-wide">
+                        <label htmlFor="password" className="block text-[11px] text-tp-ink2 mb-1.5">
                             Jelszó
                         </label>
                         <input
@@ -69,13 +69,13 @@ export default function LoginPage() {
                             autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-sm text-tp-primary placeholder:text-tp-muted focus:outline-none focus:border-tp-accent/50"
+                            className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
                             placeholder="••••••••"
                         />
                     </div>
 
                     {error && (
-                        <p className="text-xs text-tp-red bg-tp-red/10 border border-tp-red/20 rounded-lg px-3 py-2">
+                        <p className="text-xs text-tp-rust bg-tp-rust/[0.08] border border-tp-rust/20 rounded-sm px-3 py-2">
                             {error}
                         </p>
                     )}
@@ -83,21 +83,21 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-tp-accent text-tp-bg font-mono text-sm font-bold rounded-lg py-2.5 hover:shadow-accent-glow transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? "Bejelentkezés..." : "Bejelentkezés"}
                     </button>
                 </form>
 
-                <p className="text-xs text-tp-muted mt-6 text-center">
+                <p className="text-[13px] text-tp-ink2 mt-6 text-center">
                     Nincs még fiókod?{" "}
-                    <Link href="/register" className="text-tp-accent hover:underline">
+                    <Link href="/register" className="text-tp-teal hover:underline">
                         Regisztráció
                     </Link>
                 </p>
 
-                <p className="text-xs text-tp-muted mt-3 text-center">
-                    <Link href="/" className="hover:text-tp-sec">
+                <p className="text-[13px] text-tp-ink2 mt-3 text-center">
+                    <Link href="/" className="hover:text-tp-ink">
                         ← Vissza vendégként
                     </Link>
                 </p>

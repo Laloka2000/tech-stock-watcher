@@ -25,7 +25,7 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
 
     if (points.length < 2){
         return (
-            <div className="flex items-center justify-center h-[240px] text-tp-muted font-mono text-xs">
+            <div className="flex items-center justify-center h-[240px] text-tp-ink2 font-mono text-xs">
                 No chart data available
             </div>
         );
@@ -72,10 +72,10 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
         <div className="relative w-full">
             {/* Hover tooltip */}
             {hovered && (
-                <div className="absolute z-10 pointer-events-none bg-tp-surf border border-tp-border rounded-lg px-3 py-2 text-xs font-mono" style={{left: Math.min(xOf(hoverIdx!) + 14, W-108), top: yOf(hovered.close) - 50,}}>
-                    <div className="text-tp-muted mb-0.5">{hovered.date}</div>
-                    <div className="text-tp-primary font-bold">${hovered.close.toFixed(2)}</div>
-                    <div>H: ${hovered.high.toFixed(2)} · L: ${hovered.low.toFixed(2)}</div>
+                <div className="absolute z-10 pointer-events-none bg-tp-surf border border-tp-line rounded-sm px-3 py-2 text-xs font-mono shadow-sm" style={{left: Math.min(xOf(hoverIdx!) + 14, W-108), top: yOf(hovered.close) - 50,}}>
+                    <div className="text-tp-ink2 mb-0.5">{hovered.date}</div>
+                    <div className="text-tp-ink font-bold">${hovered.close.toFixed(2)}</div>
+                    <div className="text-tp-ink2">H: ${hovered.high.toFixed(2)} · L: ${hovered.low.toFixed(2)}</div>
                 </div>
             )}
 
@@ -102,14 +102,14 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
                     <g key={value}>
                         <line
                             x1={PAD.l} y1={y} x2={PAD.l + CW} y2={y}
-                            stroke="#1c2a1e" strokeWidth="1"
+                            stroke="#DDCBAE" strokeWidth="1"
                         />
                         <text
                             x={PAD.l - 8} y={y + 4}
                             textAnchor="end"
-                            fill="#3d5040"
+                            fill="#A89A82"
                             fontSize="10"
-                            fontFamily="'Space Mono', monospace"
+                            fontFamily="'IBM Plex Mono', monospace"
                         >
                             {niceLabel(value)}
                         </text>
@@ -130,29 +130,29 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
                 />
 
                 {/** Last price dot */}
-                <circle 
+                <circle
                     cx={xOf(points.length - 1)}
                     cy={yOf(lastPoint.close)}
                     r="4"
                     fill={color}
-                    stroke="#070c09"
+                    stroke="#FBF4E9"
                     strokeWidth="2"
                 />
 
                 {/** Hover crosshair */}
                 {hoverIdx !== null && (
                     <>
-                        <line 
+                        <line
                             x1={xOf(hoverIdx)} y1={PAD.t}
                             x2={xOf(hoverIdx)} y2={PAD.t + CH}
-                            stroke="#1c2a1e" strokeWidth="1" strokeDasharray="3,3"
+                            stroke="#C9B592" strokeWidth="1" strokeDasharray="3,3"
                         />
-                        <circle 
+                        <circle
                             cx={xOf(hoverIdx)}
                             cy={yOf(points[hoverIdx].close)}
                             r="4"
                             fill={color}
-                            stroke="#70c90"
+                            stroke="#FBF4E9"
                             strokeWidth="2"
                         />
                     </>
@@ -165,9 +165,9 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
                         x={xOf(i)}
                         y={PAD.t + CH + 20}
                         textAnchor="middle"
-                        fill="#3d5040"
+                        fill="#A89A82"
                         fontSize="10"
-                        fontFamily="'Space Mono', monospace"
+                        fontFamily="'IBM Plex Mono', monospace"
                     >
                         {fmtDate(points[i].date)}
                     </text>

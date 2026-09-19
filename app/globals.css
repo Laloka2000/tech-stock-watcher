@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -12,9 +12,9 @@
   }
 
   html {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-    background-color: #070c09;
-    color: #e8f2e8;
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    background-color: #F4E6D3;
+    color: #22261F;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
@@ -27,8 +27,8 @@
   /* Custom scrollbar */
   ::-webkit-scrollbar {width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb{ background: #1c2a1e; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #243428; }
+  ::-webkit-scrollbar-thumb{ background: #DDCBAE; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C9B592; }
 
   .font-mono {font-variant-numeric: tabular-nums;}
 }

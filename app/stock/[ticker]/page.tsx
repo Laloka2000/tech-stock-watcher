@@ -41,54 +41,54 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
 
     const quote = quotes[ticker] ?? null;
     const up = (quote?.percentChange ?? 0) >= 0;
-    const color = up ? "#00e68e" : "#ff5252";
+    const color = up ? "#1F6F5C" : "#AC4B2F";
     const inList = hasTickers(ticker);
 
     const fundamentalRows = fundamentals ? [
-        ["52W High", fmtPrice(fundamentals.w52High)],
-        ["52W Low", fmtPrice(fundamentals.w52Low)],
-        ["Div Yield", fmtPct(fundamentals.divYield)],
+        ["52W high", fmtPrice(fundamentals.w52High)],
+        ["52W low", fmtPrice(fundamentals.w52Low)],
+        ["Dividend yield", fmtPct(fundamentals.divYield)],
         ["ROE", fmtPct(fundamentals.roe)],
-        ["Debt / Equity", fmtNum(fundamentals.debtToEq)],
-        ["Rev Growth YoY", fmtPct(fundamentals.revenueGrowYoY)],
+        ["Debt / equity", fmtNum(fundamentals.debtToEq)],
+        ["Revenue growth YoY", fmtPct(fundamentals.revenueGrowYoY)],
     ] : [];
 
     return (
-        <div className="flex h-screen overflow-hidden bg-tp-bg">
+        <div className="flex h-screen overflow-hidden bg-tp-paper">
 
             {/* DESKTOP SIDEBAR */}
-            <aside className="hidden md:flex w-[272px] flex-shrink-0 border-r border-tp-border bg-tp-surf flex-col">
+            <aside className="hidden md:flex w-[288px] flex-shrink-0 border-r border-tp-line bg-tp-surf flex-col">
                 {/* Back + header */}
-                <div className="px-5 py-4 border-b border-tp-border flex items-center gap-3">
+                <div className="px-5 py-4 border-b border-tp-line flex items-center gap-3">
                     <Link href="/"
-                        className="w-8 h-8 rounded-lg bg-tp-card border border-tp-border flex items-center justify-center text-tp-muted hover:text-tp-primary hover:border-tp-accent/40 transition-all flex-shrink-0">
+                        className="w-8 h-8 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center text-tp-ink2 hover:text-tp-ink hover:border-tp-teal/40 transition-all flex-shrink-0">
                         ←
                     </Link>
                     <div>
-                        <div className="font-mono text-[13px] font-bold text-tp-primary tracking-[0.06em]">TECHPULSE</div>
-                        <div className="text-[10px] text-tp-muted">Stock Detail</div>
+                        <div className="font-serif text-[15px] font-semibold text-tp-ink">TechPulse</div>
+                        <div className="text-[10px] text-tp-ink2">Stock detail</div>
                     </div>
                 </div>
 
                 {/* Stock summary */}
-                <div className="px-5 py-4 border-b border-tp-border">
+                <div className="px-5 py-4 border-b border-tp-line">
                     <div className="flex items-start gap-3 mb-4">
                         {profile?.logo ? (
-                            <Image src={profile.logo} alt={ticker} width={40} height={40} className="rounded-xl" unoptimized />
+                            <Image src={profile.logo} alt={ticker} width={40} height={40} className="rounded-sm" unoptimized />
                         ) : (
-                            <div className="w-10 h-10 rounded-xl bg-tp-border flex items-center justify-center font-mono text-xs font-bold text-tp-sec">
+                            <div className="w-10 h-10 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center font-mono text-xs font-semibold text-tp-ink2">
                                 {ticker.slice(0, 2)}
                             </div>
                         )}
                         <div>
-                            <div className="font-mono text-sm font-bold text-tp-primary">{ticker}</div>
-                            <div className="text-[11px] text-tp-muted">{profile?.name ?? "Loading..."}</div>
+                            <div className="font-mono text-sm font-semibold text-tp-ink">{ticker}</div>
+                            <div className="text-[11px] text-tp-ink2">{profile?.name ?? "Loading…"}</div>
                         </div>
                     </div>
 
                     {quote ? (
                         <>
-                            <div className="font-mono text-3xl font-bold text-tp-primary leading-none mb-2">
+                            <div className="font-serif text-3xl font-semibold text-tp-ink leading-none mb-2">
                                 ${fmtPrice(quote.price)}
                             </div>
                             <ChangeBadge value={quote.percentChange} />
@@ -96,8 +96,8 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                                 {[["Open", fmtPrice(quote.open)], ["Prev", fmtPrice(quote.prevClose)],
                                     ["High", fmtPrice(quote.high)], ["Low",  fmtPrice(quote.low)]].map(([l, v]) => (
                                     <div key={l}>
-                                        <span className="text-tp-muted">{l} </span>
-                                        <span className="text-tp-sec">{v}</span>
+                                        <span className="text-tp-ink2">{l} </span>
+                                        <span className="text-tp-ink">{v}</span>
                                     </div>
                                 ))}
                             </div>
@@ -105,7 +105,7 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                     ) : (
                         <div className="space-y-2">
                             {[40, 60, 80].map(w => (
-                                <div key={w} className="h-3 bg-tp-border rounded animate-pulse" style={{ width: `${w}%` }} />
+                                <div key={w} className="h-3 bg-tp-line/50 rounded-sm animate-pulse" style={{ width: `${w}%` }} />
                             ))}
                         </div>
                     )}
@@ -120,21 +120,21 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                         ["Country",  profile.country],
                     ].map(([l, v]) => (
                         <div key={l} className="flex justify-between">
-                            <span className="text-tp-muted">{l}</span>
-                            <span className="text-tp-sec font-medium">{v}</span>
+                            <span className="text-tp-ink2">{l}</span>
+                            <span className="text-tp-ink font-medium">{v}</span>
                         </div>
                     ))}
                 </div>
 
                 {/* Watchlist gomb */}
-                <div className="p-4 border-t border-tp-border">
+                <div className="p-4 border-t border-tp-line">
                     <button
                         onClick={() => inList ? removeTickers(ticker) : addTickers(ticker)}
-                        className={"w-full py-2.5 rounded-xl border text-xs font-mono font-bold tracking-wide transition-all " +
+                        className={"w-full py-2.5 rounded-sm border text-xs font-mono font-semibold transition-all " +
                             (inList
-                                ? "border-tp-red/40 text-tp-red bg-tp-red/[0.05] hover:bg-tp-red/10"
-                                : "border-tp-accent/40 text-tp-accent bg-tp-accent/[0.05] hover:bg-tp-accent/10")}>
-                        {inList ? "- Remove from Watchlist" : "+ Add to Watchlist"}
+                                ? "border-tp-rust/40 text-tp-rust bg-tp-rust/[0.05] hover:bg-tp-rust/10"
+                                : "border-tp-teal/40 text-tp-teal bg-tp-teal/[0.05] hover:bg-tp-teal/10")}>
+                        {inList ? "− Remove from watchlist" : "+ Add to watchlist"}
                     </button>
                 </div>
             </aside>
@@ -143,38 +143,38 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
             <main className="flex-1 flex flex-col overflow-hidden">
 
                 {/* MOBIL HEADER */}
-                <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-tp-border bg-tp-surf flex-shrink-0">
+                <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-tp-line bg-tp-surf flex-shrink-0">
                     <Link href="/"
-                        className="w-9 h-9 rounded-xl bg-tp-card border border-tp-border flex items-center justify-center text-tp-muted active:scale-95 transition-all flex-shrink-0">
+                        className="w-9 h-9 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center text-tp-ink2 active:scale-95 transition-all flex-shrink-0">
                         ←
                     </Link>
                     <div className="flex-1 min-w-0">
-                        <div className="font-mono text-base font-bold text-tp-primary leading-tight">{ticker}</div>
-                        {profile && <div className="text-[11px] text-tp-muted truncate">{profile.name}</div>}
+                        <div className="font-mono text-base font-semibold text-tp-ink leading-tight">{ticker}</div>
+                        {profile && <div className="text-[11px] text-tp-ink2 truncate">{profile.name}</div>}
                     </div>
                     <button
                         onClick={() => inList ? removeTickers(ticker) : addTickers(ticker)}
-                        className={"px-3 py-1.5 rounded-lg border text-[11px] font-mono font-bold transition-all active:scale-95 flex-shrink-0 " +
+                        className={"px-3 py-1.5 rounded-sm border text-[11px] font-mono font-semibold transition-all active:scale-95 flex-shrink-0 " +
                             (inList
-                                ? "border-tp-red/40 text-tp-red bg-tp-red/[0.05]"
-                                : "border-tp-accent/40 text-tp-accent bg-tp-accent/[0.05]")}>
+                                ? "border-tp-rust/40 text-tp-rust bg-tp-rust/[0.05]"
+                                : "border-tp-teal/40 text-tp-teal bg-tp-teal/[0.05]")}>
                         {inList ? "− Remove" : "+ Watch"}
                     </button>
                 </header>
 
                 {/* DESKTOP TOPBAR */}
-                <header className="hidden md:flex items-center px-8 py-4 border-b border-tp-border bg-tp-surf flex-shrink-0">
+                <header className="hidden md:flex items-center px-8 py-5 border-b border-tp-line bg-tp-surf flex-shrink-0">
                     <div className="flex items-center gap-4">
-                        <h1 className="font-mono text-lg font-bold text-tp-primary">{ticker}</h1>
-                        {profile && <span className="text-sm text-tp-muted">{profile.name}</span>}
+                        <h1 className="font-serif text-2xl font-semibold text-tp-ink">{ticker}</h1>
+                        {profile && <span className="text-sm text-tp-ink2">{profile.name}</span>}
                         {profile && (
-                            <span className="text-[10px] text-tp-muted bg-tp-card border border-tp-border px-2 py-0.5 rounded">
+                            <span className="text-[11px] text-tp-ink2 bg-tp-paper border border-tp-line px-2 py-0.5 rounded-sm">
                                 {profile.sector}
                             </span>
                         )}
                     </div>
                     <div className="flex-1" />
-                    <button onClick={() => refresh()} className="text-tp-muted hover:text-tp-sec text-sm transition-colors px-2">
+                    <button onClick={() => refresh()} className="text-tp-ink2 hover:text-tp-teal text-sm transition-colors px-2">
                         ↻
                     </button>
                 </header>
@@ -182,47 +182,47 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                 <div className="flex-1 overflow-y-auto">
 
                     {/* MOBILE: Price + change card */}
-                    <div className="md:hidden px-4 py-4 border-b border-tp-border bg-tp-surf">
+                    <div className="md:hidden px-4 py-4 border-b border-tp-line bg-tp-surf">
                         {quote ? (
                             <div className="flex items-end justify-between">
                                 <div>
-                                    <div className="font-mono text-4xl font-bold text-tp-primary leading-none">
+                                    <div className="font-serif text-4xl font-semibold text-tp-ink leading-none">
                                         ${fmtPrice(quote.price)}
                                     </div>
                                     <div className="mt-2">
                                         <ChangeBadge value={quote.percentChange} />
                                     </div>
                                 </div>
-                                <div className="text-right text-[11px] font-mono space-y-1 text-tp-muted">
-                                    <div>H: <span className="text-tp-sec">${fmtPrice(quote.high)}</span></div>
-                                    <div>L: <span className="text-tp-sec">${fmtPrice(quote.low)}</span></div>
-                                    <div>O: <span className="text-tp-sec">${fmtPrice(quote.open)}</span></div>
+                                <div className="text-right text-[11px] font-mono space-y-1 text-tp-ink2">
+                                    <div>H: <span className="text-tp-ink">${fmtPrice(quote.high)}</span></div>
+                                    <div>L: <span className="text-tp-ink">${fmtPrice(quote.low)}</span></div>
+                                    <div>O: <span className="text-tp-ink">${fmtPrice(quote.open)}</span></div>
                                 </div>
                             </div>
                         ) : (
                             <div className="space-y-2">
-                                <div className="h-10 w-48 bg-tp-border rounded animate-pulse" />
-                                <div className="h-5 w-24 bg-tp-border rounded animate-pulse" />
+                                <div className="h-10 w-48 bg-tp-line/50 rounded-sm animate-pulse" />
+                                <div className="h-5 w-24 bg-tp-line/50 rounded-sm animate-pulse" />
                             </div>
                         )}
                     </div>
 
                     {/* CHART */}
                     <div className="p-4 md:p-8">
-                        <div className="bg-tp-card border border-tp-border rounded-2xl p-4 md:p-6">
+                        <div className="bg-tp-surf border border-tp-line rounded-sm p-4 md:p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full animate-pulse"
-                                        style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
-                                    <span className="text-[10px] text-tp-muted uppercase tracking-widest">Price History</span>
+                                    <div className="w-2 h-2 rounded-full"
+                                        style={{ background: color }} />
+                                    <span className="text-[11px] text-tp-ink2">Price history</span>
                                 </div>
                                 <div className="flex gap-1">
                                     {ranges.map(r => (
                                         <button key={r} onClick={() => setRange(r)}
-                                            className={"px-2.5 py-1.5 md:py-1 rounded text-[11px] md:text-[10px] font-mono font-bold transition-all " +
+                                            className={"px-2.5 py-1.5 md:py-1 rounded-sm text-[11px] md:text-[10px] font-mono font-semibold transition-all " +
                                                 (range === r
-                                                    ? "text-tp-accent bg-tp-accent/15 border border-tp-accent/40"
-                                                    : "text-tp-muted border border-transparent hover:border-tp-border")}>
+                                                    ? "text-tp-teal bg-tp-teal/[0.1] border border-tp-teal/40"
+                                                    : "text-tp-ink2 border border-transparent hover:border-tp-line")}>
                                             {r}
                                         </button>
                                     ))}
@@ -230,8 +230,8 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                             </div>
 
                             {chartLoading ? (
-                                <div className="flex items-center justify-center h-[200px] md:h-[240px] text-tp-muted font-mono text-xs">
-                                    Loading chart...
+                                <div className="flex items-center justify-center h-[200px] md:h-[240px] text-tp-ink2 font-mono text-xs">
+                                    Loading chart…
                                 </div>
                             ) : (
                                 <PriceChart points={points} range={range} color={color} />
@@ -245,8 +245,8 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                             Array.from({ length: 4 }).map((_, i) => <MetricCardSkeleton key={i} />)
                         ) : (
                             <>
-                                <MetricCard label="Market Cap" value={fmtCap(fundamentals?.marketCap ?? null)} />
-                                <MetricCard label="P/E Ratio"  value={fmtNum(fundamentals?.pe ?? null)} />
+                                <MetricCard label="Market cap" value={fmtCap(fundamentals?.marketCap ?? null)} />
+                                <MetricCard label="P/E ratio"  value={fmtNum(fundamentals?.pe ?? null)} />
                                 <MetricCard label="EPS (TTM)"  value={fundamentals?.eps != null ? `$${fmtNum(fundamentals.eps)}` : "N/A"} />
                                 <MetricCard label="Beta"       value={fmtNum(fundamentals?.beta ?? null)} />
                             </>
@@ -256,17 +256,17 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                     {/* FUNDAMENTALS */}
                     {fundamentals && (
                         <div className="px-4 md:px-8 pb-8">
-                            <div className="bg-tp-card border border-tp-border rounded-2xl p-4 md:p-6">
+                            <div className="bg-tp-surf border border-tp-line rounded-sm p-4 md:p-6">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-                                    <span className="text-[10px] text-tp-muted uppercase tracking-widest">Fundamentals</span>
-                                    <span className="text-[10px] text-tp-muted ml-auto">Source: Finnhub</span>
+                                    <span className="text-[11px] text-tp-ink2">Fundamentals</span>
+                                    <span className="text-[11px] text-tp-ink3 ml-auto">Source: Finnhub</span>
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {fundamentalRows.map(([label, value]) => (
                                         <div key={label}>
-                                            <div className="text-[10px] text-tp-muted uppercase tracking-wider mb-1">{label}</div>
-                                            <div className="font-mono text-sm font-bold text-tp-primary">{value}</div>
+                                            <div className="text-[11px] text-tp-ink2 mb-1">{label}</div>
+                                            <div className="font-mono text-sm font-semibold text-tp-ink">{value}</div>
                                         </div>
                                     ))}
                                 </div>

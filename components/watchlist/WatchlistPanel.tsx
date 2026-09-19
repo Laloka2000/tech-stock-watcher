@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { StockRow } from "./StockRow";
 import { AddTickerModal } from "./AddTickerModal";
 import { StockRowSkeleton } from "../ui";
+import { AuthStatus } from "../auth/AuthStatus";
 import type { Quote, ChartPoint } from "@/types/stock";
 
 interface WatchlistPanelProps {
@@ -36,64 +37,66 @@ export function WatchlistPanel({
 
     return (
         <>
-            <aside className="w-full md:w-[272px] flex-shrink-0 flex flex-col border-r border-tp-border bg-tp-surf h-full">
+            <aside className="w-full md:w-[288px] flex-shrink-0 flex flex-col border-r border-tp-line bg-tp-surf h-full">
 
-                {/* HEADER */}
-                <div className="border-b border-tp-border">
-                    <div className="px-4 pt-4 pb-2 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-tp-accent/10 border border-tp-accent/25 flex items-center justify-center flex-shrink-0">
-                            <svg width="16" height="16" viewBox="0 0 16 16">
-                                <polyline points="1,12 4.5,7 8,10 12,3 15,7"
-                                    fill="none" stroke="#00e68e" strokeWidth="1.8"
-                                    strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-                        <div className="flex-1">
-                            <div className="font-mono text-[13px] font-bold text-tp-primary tracking-[0.06em]">TECHPULSE</div>
-                            <div className="text-[10px] text-tp-muted">Tech Stock Dashboard</div>
-                        </div>
-                        <button onClick={onRefresh} title="Refresh"
-                            className={`text-tp-muted hover:text-tp-sec p-2 rounded-lg hover:bg-white/[0.04] active:scale-95 text-base transition-colors ${loading ? "animate-spin" : ""}`}>
-                            ↻
-                        </button>
+                {/* MASTHEAD */}
+                <div className="border-b border-tp-line px-5 pt-5 pb-4">
+                    <div className="flex items-center gap-2.5 mb-1">
+                        <svg width="18" height="18" viewBox="0 0 16 16" className="flex-shrink-0">
+                            <polyline points="1,12 4.5,7 8,10 12,3 15,7"
+                                fill="none" stroke="#1F6F5C" strokeWidth="1.6"
+                                strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span className="font-serif text-[19px] font-semibold text-tp-ink tracking-tight">TechPulse</span>
                     </div>
-
-                    <div className="px-4 pb-3 flex items-end justify-between">
-                        <div>
-                            <div className="text-[9px] text-tp-muted uppercase tracking-widest mb-0.5">Avg Today</div>
-                            <div className={"font-mono text-xl font-bold leading-none " + (up ? "text-tp-accent" : "text-tp-red")}>
-                                {up ? "+" : ""}{averageChange.toFixed(2)}%
+                    <div className="flex items-center justify-between">
+                        <p className="text-[11px] text-tp-ink2">A private stock ledger</p>
+                        <div className="flex items-center gap-3">
+                            <div className="md:hidden">
+                                <AuthStatus />
                             </div>
-                            {tickers.length > 0 && (
-                                <div className="flex items-center gap-2 mt-1 text-[10px] font-mono">
-                                    <span className="text-tp-accent">▲ {gainers} up</span>
-                                    <span className="text-tp-muted">·</span>
-                                    <span className="text-tp-red">▼ {losers} down</span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="flex items-center gap-1.5 mb-0.5">
-                            <div className="w-1.5 h-1.5 rounded-full bg-tp-accent animate-pulse" />
-                            <span className="text-[9px] text-tp-muted font-mono">{lastUpdated ?? "Live"}</span>
+                            <button onClick={onRefresh} title="Refresh"
+                                className={`text-tp-ink2 hover:text-tp-teal text-[11px] font-mono transition-colors ${loading ? "animate-spin inline-block" : ""}`}>
+                                ↻
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                {/* LISTA FEJLÉC */}
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                    <span className="text-[9px] text-tp-muted uppercase tracking-[0.14em] font-semibold">Watchlist</span>
-                    <span className="text-[9px] text-tp-muted font-mono">{tickers.length}</span>
+                {/* SUMMARY */}
+                <div className="border-b border-tp-line px-5 py-4 flex items-end justify-between">
+                    <div>
+                        <div className="text-[11px] text-tp-ink2 mb-0.5">Average today</div>
+                        <div className={"font-mono text-2xl font-semibold leading-none " + (up ? "text-tp-teal" : "text-tp-rust")}>
+                            {up ? "+" : ""}{averageChange.toFixed(2)}%
+                        </div>
+                        {tickers.length > 0 && (
+                            <div className="flex items-center gap-2 mt-1.5 text-[11px] font-mono">
+                                <span className="text-tp-teal">▲ {gainers}</span>
+                                <span className="text-tp-ink3">/</span>
+                                <span className="text-tp-rust">▼ {losers}</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="text-right">
+                        <div className="text-[11px] text-tp-ink2">{lastUpdated ?? "Live"}</div>
+                    </div>
                 </div>
 
-                {/* SOROK */}
-                <div className="flex-1 overflow-y-auto overscroll-contain divide-y divide-tp-border/30">
+                {/* LIST HEADER */}
+                <div className="px-5 pt-3 pb-1.5 flex items-center justify-between">
+                    <span className="text-[11px] text-tp-ink2">Watchlist</span>
+                    <span className="text-[11px] text-tp-ink2 font-mono">{tickers.length}</span>
+                </div>
+
+                {/* ROWS */}
+                <div className="flex-1 overflow-y-auto overscroll-contain">
                     {loading && tickers.length === 0 ? (
                         Array.from({ length: 6 }).map((_, i) => <StockRowSkeleton key={i} />)
                     ) : tickers.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-48 text-center px-6 gap-2">
-                            <div className="text-3xl">📈</div>
-                            <p className="text-tp-muted text-xs font-mono">Your watchlist is empty</p>
-                            <p className="text-tp-muted text-[10px]">Add tickers below</p>
+                        <div className="flex flex-col items-center justify-center h-48 text-center px-6 gap-1.5">
+                            <p className="text-tp-ink font-serif text-base">Nothing on watch yet</p>
+                            <p className="text-tp-ink2 text-xs">Add a ticker below to start tracking it</p>
                         </div>
                     ) : (
                         tickers.map((ticker) => (
@@ -112,10 +115,10 @@ export function WatchlistPanel({
                 </div>
 
                 {/* BOTTOM BAR */}
-                <div className="p-4 border-t border-tp-border">
+                <div className="p-4 border-t border-tp-line">
                     <button onClick={() => setShowAdd(true)}
-                        className="w-full py-3.5 md:py-2.5 rounded-xl border border-tp-accent/30 text-tp-accent font-mono font-bold tracking-wide bg-tp-accent/[0.06] hover:bg-tp-accent/[0.12] active:scale-[0.98] transition-all text-sm md:text-xs">
-                        + Add Ticker
+                        className="w-full py-3 md:py-2.5 rounded-sm border border-tp-teal/40 text-tp-teal font-mono font-semibold bg-tp-teal/[0.05] hover:bg-tp-teal/[0.1] active:scale-[0.99] transition-all text-sm md:text-xs">
+                        + Add ticker
                     </button>
                 </div>
             </aside>

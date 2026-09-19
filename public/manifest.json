@@ -4,8 +4,8 @@
     "description": "Real-time tech stock watchlist and portfolio tracker",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#070c09",
-    "theme_color": "#070c09",
+    "background_color": "#F4E6D3",
+    "theme_color": "#F4E6D3",
     "orientation": "portrait-primary",
     "categories": ["finance", "productivity"],
     "icons": [

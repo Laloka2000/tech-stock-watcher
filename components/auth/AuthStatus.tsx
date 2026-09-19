@@ -36,14 +36,14 @@ export function AuthStatus() {
     }
 
     if (loading) {
-        return <div className="h-7 w-20 bg-tp-border rounded animate-pulse" />;
+        return <div className="h-7 w-20 bg-tp-line/50 rounded-sm animate-pulse" />;
     }
 
     if (!user) {
         return (
             <Link
                 href="/login"
-                className="text-xs font-mono text-tp-sec hover:text-tp-accent border border-tp-border hover:border-tp-accent/40 rounded-lg px-3 py-1.5 transition-colors"
+                className="text-xs font-mono text-tp-ink2 hover:text-tp-teal border border-tp-line hover:border-tp-teal/40 rounded-sm px-3 py-1.5 transition-colors"
             >
                 Bejelentkezés
             </Link>
@@ -52,12 +52,12 @@ export function AuthStatus() {
 
     return (
         <div className="flex items-center gap-3">
-            <span className="text-xs text-tp-muted font-mono hidden sm:inline">
+            <span className="text-xs text-tp-ink2 font-mono hidden sm:inline">
                 {user.email}
             </span>
             <button
                 onClick={handleSignOut}
-                className="text-xs font-mono text-tp-sec hover:text-tp-red border border-tp-border hover:border-tp-red/40 rounded-lg px-3 py-1.5 transition-colors"
+                className="text-xs font-mono text-tp-ink2 hover:text-tp-rust border border-tp-line hover:border-tp-rust/40 rounded-sm px-3 py-1.5 transition-colors"
             >
                 Kijelentkezés
             </button>

@@ -10,25 +10,24 @@ const config: Config = {
     extend: {
       colors: {
         tp: {
-          bg: "#070c09",
-          surf: "#0d1510",
-          card: "#111a12",
-          border: "#1c2a1e",
-          primary: "#e8f2e8",
-          sec: "#7a9c7e",
-          muted: "#3d5040",
-          accent: "#00e68e",
-          red: "#ff5252",
-          yellow: "f0c040",
+          paper: "#F4E6D3",
+          surf: "#FBF4E9",
+          line: "#DDCBAE",
+          ink: "#22261F",
+          ink2: "#6B6355",
+          ink3: "#A89A82",
+          teal: "#1F6F5C",
+          rust: "#AC4B2F",
+          gold: "#B8862E",
         },
       },
       fontFamily: {
-        sans: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["Space Mono", "ui-monospace", "monospace"],
+        serif: ["Fraunces", "ui-serif", "Georgia", "serif"],
+        sans: ["IBM Plex Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        "accent-glow": "0 0 12px rgba(0, 230, 142, 0.4)",
-        "red-glow": "0 0 12px rgba(255, 82, 82, 0.4)",
+        ledger: "0 1px 0 0 rgba(34, 38, 31, 0.06)",
       },
       keyframes: {
         pulse: {

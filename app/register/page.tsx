@@ -58,17 +58,17 @@ export default function RegisterPage() {
                         <CheckIcon size={18} />
                     </div>
                     <h1 className="font-serif text-lg font-semibold text-tp-ink mb-2">
-                        Nézd meg az emailjeidet
+                        Check your emails
                     </h1>
                     <p className="text-[13px] text-tp-ink2">
-                        Küldtünk egy megerősítő linket a(z) <span className="text-tp-ink">{email}</span> címre.
-                        A fiókod aktiválásához kattints a linkre.
+                        We sent a confirmation link to your <span className="text-tp-ink">{email}</span> account(s).
+                        To active your account, click to the link.
                     </p>
                     <Link
                         href="/login"
                         className="inline-flex items-center gap-1.5 mt-6 text-[13px] text-tp-teal hover:underline"
                     >
-                        <ArrowLeftIcon size={12} /> Vissza a bejelentkezéshez
+                        <ArrowLeftIcon size={12} /> Back to login
                     </Link>
                 </div>
             </div>
@@ -79,10 +79,10 @@ export default function RegisterPage() {
         <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
             <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
                 <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
-                    Regisztráció
+                    Registration
                 </h1>
                 <p className="text-[13px] text-tp-ink2 mb-6">
-                    Hozz létre fiókot a perzisztens watchlisthez és az alertekhez
+                    Create an account for persistent watchlists and alerts
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,13 +98,13 @@ export default function RegisterPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
-                            placeholder="te@pelda.hu"
+                            placeholder="you@example.com"
                         />
                     </div>
 
                     <div>
                         <label htmlFor="password" className="block text-[11px] text-tp-ink2 mb-1.5">
-                            Jelszó
+                            Password
                         </label>
                         <input
                             id="password"
@@ -121,7 +121,7 @@ export default function RegisterPage() {
 
                     <div>
                         <label htmlFor="confirmPassword" className="block text-[11px] text-tp-ink2 mb-1.5">
-                            Jelszó megerősítése
+                            Confirm Password
                         </label>
                         <input
                             id="confirmPassword"
@@ -146,14 +146,14 @@ export default function RegisterPage() {
                         disabled={loading}
                         className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Regisztráció..." : "Regisztráció"}
+                        {loading ? "Registration..." : "Registration"}
                     </button>
                 </form>
 
                 <p className="text-[13px] text-tp-ink2 mt-6 text-center">
-                    Már van fiókod?{" "}
+                    Already have an account?{" "}
                     <Link href="/login" className="text-tp-teal hover:underline">
-                        Bejelentkezés
+                        Login
                     </Link>
                 </p>
             </div>

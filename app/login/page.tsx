@@ -24,7 +24,7 @@ export default function LoginPage() {
         setLoading(false);
 
         if (error) {
-            setError("Hibás email cím vagy jelszó.");
+            setError("Wrong email or password.");
             return;
         }
 
@@ -36,10 +36,10 @@ export default function LoginPage() {
         <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
             <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
                 <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
-                    Bejelentkezés
+                    Login
                 </h1>
                 <p className="text-[13px] text-tp-ink2 mb-6">
-                    TechPulse — a watchlist eléréséhez jelentkezz be
+                    TechPulse - Login to access your watchlist
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +55,7 @@ export default function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full bg-tp-paper border border-tp-line rounded-sm px-3 py-2 text-sm text-tp-ink placeholder:text-tp-ink3 focus:outline-none focus:border-tp-teal/60 focus:ring-1 focus:ring-tp-teal/20"
-                            placeholder="te@pelda.hu"
+                            placeholder="you@example.com"
                         />
                     </div>
 
@@ -86,20 +86,20 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Bejelentkezés..." : "Bejelentkezés"}
+                        {loading ? "Login..." : "Login"}
                     </button>
                 </form>
 
                 <p className="text-[13px] text-tp-ink2 mt-6 text-center">
-                    Nincs még fiókod?{" "}
+                    Don't have an account yet?{" "}
                     <Link href="/register" className="text-tp-teal hover:underline">
-                        Regisztráció
+                        Register
                     </Link>
                 </p>
 
                 <p className="text-[13px] text-tp-ink2 mt-3 text-center">
                     <Link href="/" className="inline-flex items-center gap-1.5 hover:text-tp-ink">
-                        <ArrowLeftIcon size={12} /> Vissza vendégként
+                        <ArrowLeftIcon size={12} /> Back as guest
                     </Link>
                 </p>
             </div>

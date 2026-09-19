@@ -1,5 +1,6 @@
 "use client";
 import type { Sentiment } from "@/types/stock";
+import { TriangleUpIcon, TriangleDownIcon } from "./icons";
 
 interface BadgeProps {
     sentiment: Sentiment;
@@ -27,8 +28,8 @@ export function ChangeBadge({ value }: ChangeBadgeProps) {
     const moveUp = value >= 0;
     const color = moveUp ? "text-tp-teal" : "text-tp-rust";
     return (
-        <span className={`inline-flex items-baseline gap-1 font-mono text-sm font-semibold ${color}`}>
-            <span aria-hidden="true">{moveUp ? "▲" : "▼"}</span>
+        <span className={`inline-flex items-center gap-1 font-mono text-sm font-semibold ${color}`}>
+            {moveUp ? <TriangleUpIcon /> : <TriangleDownIcon />}
             {moveUp ? "+" : ""}{value.toFixed(2)}%
         </span>
     );

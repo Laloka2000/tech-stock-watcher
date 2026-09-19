@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/clients";
+import { CheckIcon, ArrowLeftIcon } from "@/components/ui/icons";
 
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -53,7 +54,9 @@ export default function RegisterPage() {
         return (
             <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
                 <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8 text-center">
-                    <div className="text-tp-teal text-2xl mb-3">✓</div>
+                    <div className="w-10 h-10 rounded-full bg-tp-teal/10 border border-tp-teal/30 flex items-center justify-center text-tp-teal mx-auto mb-4">
+                        <CheckIcon size={18} />
+                    </div>
                     <h1 className="font-serif text-lg font-semibold text-tp-ink mb-2">
                         Nézd meg az emailjeidet
                     </h1>
@@ -63,9 +66,9 @@ export default function RegisterPage() {
                     </p>
                     <Link
                         href="/login"
-                        className="inline-block mt-6 text-[13px] text-tp-teal hover:underline"
+                        className="inline-flex items-center gap-1.5 mt-6 text-[13px] text-tp-teal hover:underline"
                     >
-                        ← Vissza a bejelentkezéshez
+                        <ArrowLeftIcon size={12} /> Vissza a bejelentkezéshez
                     </Link>
                 </div>
             </div>

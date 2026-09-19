@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { AlertIcon, RefreshIcon } from "./ui/icons";
 
 interface Props {
     children: React.ReactNode;
@@ -33,8 +34,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
             return (
                 <div className="flex flex-col items-center justify-center h-screen bg-tp-paper gap-6 p-8">
-                    <div className="w-14 h-14 rounded-sm bg-tp-rust/10 border border-tp-rust/30 flex items-center justify-center text-2xl">
-                        ⚠
+                    <div className="w-14 h-14 rounded-sm bg-tp-rust/10 border border-tp-rust/30 flex items-center justify-center text-tp-rust">
+                        <AlertIcon size={24} />
                     </div>
                     <div className="text-center max-w-sm">
                         <h2 className="font-serif text-lg font-semibold text-tp-ink mb-2">
@@ -54,9 +55,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
                             this.setState({ hasError: false, message: "" });
                             window.location.reload();
                         }}
-                        className="px-5 py-2.5 rounded-sm border border-tp-teal/40 text-tp-teal bg-tp-teal/5 hover:bg-tp-teal/10 text-xs font-mono font-semibold transition-all"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-sm border border-tp-teal/40 text-tp-teal bg-tp-teal/5 hover:bg-tp-teal/10 text-xs font-mono font-semibold transition-all"
                     >
-                        ↻ Reload
+                        <RefreshIcon size={13} /> Reload
                     </button>
                 </div>
             )

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/clients";
+import { ArrowLeftIcon } from "@/components/ui/icons";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -97,8 +98,8 @@ export default function LoginPage() {
                 </p>
 
                 <p className="text-[13px] text-tp-ink2 mt-3 text-center">
-                    <Link href="/" className="hover:text-tp-ink">
-                        ← Vissza vendégként
+                    <Link href="/" className="inline-flex items-center gap-1.5 hover:text-tp-ink">
+                        <ArrowLeftIcon size={12} /> Vissza vendégként
                     </Link>
                 </p>
             </div>

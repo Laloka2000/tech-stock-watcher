@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Sparkline } from "../charts/Sparkline";
 import { StockRowSkeleton } from "../ui";
+import { CloseIcon } from "../ui/icons";
 import type { Quote, ChartPoint } from "@/types/stock";
 
 interface StockRowProps {
@@ -72,7 +73,7 @@ export function StockRow({ ticker, quote, chart, logo, sector, active, onRemove 
                 className="hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity text-tp-ink2 hover:text-tp-rust text-xs p-1.5 rounded-sm flex-shrink-0 items-center justify-center"
                 aria-label={`Remove ${ticker}`}
             >
-                ✕
+                <CloseIcon />
             </button>
         </Link>
     );

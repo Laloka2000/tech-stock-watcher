@@ -7,6 +7,7 @@ import { useQuotes, useChart, useProfile } from "@/hooks/useStockData";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { PriceChart } from "@/components/charts/PriceChart";
 import { ChangeBadge, MetricCard, MetricCardSkeleton } from "@/components/ui";
+import { ArrowLeftIcon, RefreshIcon } from "@/components/ui/icons";
 import type { ChartRange } from "@/types/stock";
 
 const ranges: ChartRange[] = ["1W", "1M", "3M"];
@@ -62,7 +63,7 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                 <div className="px-5 py-4 border-b border-tp-line flex items-center gap-3">
                     <Link href="/"
                         className="w-8 h-8 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center text-tp-ink2 hover:text-tp-ink hover:border-tp-teal/40 transition-all flex-shrink-0">
-                        ←
+                        <ArrowLeftIcon />
                     </Link>
                     <div>
                         <div className="font-serif text-[15px] font-semibold text-tp-ink">TechPulse</div>
@@ -146,7 +147,7 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                 <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-tp-line bg-tp-surf flex-shrink-0">
                     <Link href="/"
                         className="w-9 h-9 rounded-sm bg-tp-paper border border-tp-line flex items-center justify-center text-tp-ink2 active:scale-95 transition-all flex-shrink-0">
-                        ←
+                        <ArrowLeftIcon />
                     </Link>
                     <div className="flex-1 min-w-0">
                         <div className="font-mono text-base font-semibold text-tp-ink leading-tight">{ticker}</div>
@@ -174,8 +175,8 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
                         )}
                     </div>
                     <div className="flex-1" />
-                    <button onClick={() => refresh()} className="text-tp-ink2 hover:text-tp-teal text-sm transition-colors px-2">
-                        ↻
+                    <button onClick={() => refresh()} className="text-tp-ink2 hover:text-tp-teal transition-colors px-2" aria-label="Refresh">
+                        <RefreshIcon />
                     </button>
                 </header>
 

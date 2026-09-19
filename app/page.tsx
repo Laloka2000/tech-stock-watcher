@@ -6,6 +6,7 @@ import { WatchlistPanel } from "@/components/watchlist/WatchlistPanel";
 import { ChangeBadge } from "@/components/ui";
 import { Sparkline } from "@/components/charts/Sparkline";
 import { AuthStatus } from "@/components/auth/AuthStatus";
+import { CloseIcon, TriangleUpIcon, TriangleDownIcon } from "@/components/ui/icons";
 import Link from "next/link";
 import type { ChartPoint, Quote } from "@/types/stock";
 
@@ -64,7 +65,7 @@ function StockRowLedger({ ticker, quote, sparkData, onRemove }: {
         className="opacity-0 group-hover:opacity-100 transition-opacity text-tp-ink2 hover:text-tp-rust text-xs p-1 rounded-sm justify-self-end"
         aria-label={`Remove ${ticker}`}
       >
-        ✕
+        <CloseIcon />
       </button>
     </Link>
   );
@@ -114,9 +115,9 @@ export default function DashboardPage() {
           <div className="flex-1" />
           {quotedTickers.length > 0 && (
             <div className="flex items-center gap-3 mr-4 font-mono text-xs">
-              <span className="text-tp-teal">▲ {gainers}</span>
+              <span className="inline-flex items-center gap-1 text-tp-teal"><TriangleUpIcon /> {gainers}</span>
               <span className="text-tp-ink3">/</span>
-              <span className="text-tp-rust">▼ {losers}</span>
+              <span className="inline-flex items-center gap-1 text-tp-rust"><TriangleDownIcon /> {losers}</span>
             </div>
           )}
           <AuthStatus />

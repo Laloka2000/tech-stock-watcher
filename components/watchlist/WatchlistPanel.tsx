@@ -6,6 +6,7 @@ import { StockRow } from "./StockRow";
 import { AddTickerModal } from "./AddTickerModal";
 import { StockRowSkeleton } from "../ui";
 import { AuthStatus } from "../auth/AuthStatus";
+import { RefreshIcon, TriangleUpIcon, TriangleDownIcon } from "../ui/icons";
 import type { Quote, ChartPoint } from "@/types/stock";
 
 interface WatchlistPanelProps {
@@ -56,8 +57,8 @@ export function WatchlistPanel({
                                 <AuthStatus />
                             </div>
                             <button onClick={onRefresh} title="Refresh"
-                                className={`text-tp-ink2 hover:text-tp-teal text-[11px] font-mono transition-colors ${loading ? "animate-spin inline-block" : ""}`}>
-                                ↻
+                                className={`text-tp-ink2 hover:text-tp-teal transition-colors ${loading ? "animate-spin inline-block" : ""}`}>
+                                <RefreshIcon />
                             </button>
                         </div>
                     </div>
@@ -72,9 +73,9 @@ export function WatchlistPanel({
                         </div>
                         {tickers.length > 0 && (
                             <div className="flex items-center gap-2 mt-1.5 text-[11px] font-mono">
-                                <span className="text-tp-teal">▲ {gainers}</span>
+                                <span className="inline-flex items-center gap-1 text-tp-teal"><TriangleUpIcon /> {gainers}</span>
                                 <span className="text-tp-ink3">/</span>
-                                <span className="text-tp-rust">▼ {losers}</span>
+                                <span className="inline-flex items-center gap-1 text-tp-rust"><TriangleDownIcon /> {losers}</span>
                             </div>
                         )}
                     </div>

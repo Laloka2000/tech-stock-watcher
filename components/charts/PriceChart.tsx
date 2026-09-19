@@ -68,20 +68,33 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
 
     const gid = `area-${color.replace(/[^a-z0-9]/gi, "")}`;
 
+    // The SVG is scaled by CSS (w-full) against a fixed viewBox, so the
+    // overlay tooltip must be positioned in percent-of-container terms,
+    // not raw viewBox pixels — otherwise it drifts off-screen once the
+    // chart is rendered narrower than the viewBox (e.g. on mobile).
+    const isRightHalf = hoverIdx !== null && hoverIdx > (points.length - 1) / 2;
+
     return (
         <div className="relative w-full">
             {/* Hover tooltip */}
             {hovered && (
-                <div className="absolute z-10 pointer-events-none bg-tp-surf border border-tp-line rounded-sm px-3 py-2 text-xs font-mono shadow-sm" style={{left: Math.min(xOf(hoverIdx!) + 14, W-108), top: yOf(hovered.close) - 50,}}>
+                <div
+                    className="absolute z-10 pointer-events-none bg-tp-surf border border-tp-line rounded-sm px-3 py-2 text-xs font-mono shadow-sm whitespace-nowrap"
+                    style={{
+                        left: `${(xOf(hoverIdx!) / W) * 100}%`,
+                        top: `${(yOf(hovered.close) / H) * 100}%`,
+                        transform: `translate(${isRightHalf ? "calc(-100% - 10px)" : "10px"}, -56px)`,
+                    }}
+                >
                     <div className="text-tp-ink2 mb-0.5">{hovered.date}</div>
                     <div className="text-tp-ink font-bold">${hovered.close.toFixed(2)}</div>
                     <div className="text-tp-ink2">H: ${hovered.high.toFixed(2)} · L: ${hovered.low.toFixed(2)}</div>
                 </div>
             )}
 
-            <svg 
+            <svg
                 viewBox={`0 0 ${W} ${H}`}
-                className="w-full overflow-visible"
+                className="w-full overflow-visible touch-none"
                 onMouseLeave={() => setHoverIdx(null)}
                 onMouseMove={(e) => {
                     const svg = e.currentTarget.getBoundingClientRect();
@@ -90,6 +103,21 @@ export function PriceChart({ points, range, color }: PriceChartProps) {
                     const idx = Math.round((chartX / CW) * (points.length - 1));
                     setHoverIdx(Math.max(0, Math.min(points.length - 1, idx)));
                 }}
+                onTouchStart={(e) => {
+                    const svg = e.currentTarget.getBoundingClientRect();
+                    const relativeX = ((e.touches[0].clientX - svg.left) / svg.width) * W;
+                    const chartX = relativeX - PAD.l;
+                    const idx = Math.round((chartX / CW) * (points.length - 1));
+                    setHoverIdx(Math.max(0, Math.min(points.length - 1, idx)));
+                }}
+                onTouchMove={(e) => {
+                    const svg = e.currentTarget.getBoundingClientRect();
+                    const relativeX = ((e.touches[0].clientX - svg.left) / svg.width) * W;
+                    const chartX = relativeX - PAD.l;
+                    const idx = Math.round((chartX / CW) * (points.length - 1));
+                    setHoverIdx(Math.max(0, Math.min(points.length - 1, idx)));
+                }}
+                onTouchEnd={() => setHoverIdx(null)}
             >
                 <defs>
                     <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">

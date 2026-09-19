@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { CloseIcon, AlertIcon } from "../ui/icons";
 
 interface AddTickerModalProps {
     onAdd: (ticker: string) => void;
@@ -90,9 +91,10 @@ export function AddTickerModal({ onAdd, onClose, hasTicker }: AddTickerModalProp
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-tp-ink2 hover:text-tp-ink transition-colors text-sm"
+                        className="text-tp-ink2 hover:text-tp-ink transition-colors"
+                        aria-label="Close"
                     >
-                        ✕
+                        <CloseIcon />
                     </button>
                 </div>
 
@@ -119,7 +121,7 @@ export function AddTickerModal({ onAdd, onClose, hasTicker }: AddTickerModalProp
                 {/* Error message */}
                 {error && (
                     <div className="mb-4 px-3 py-2.5 bg-tp-rust/[0.08] border border-tp-rust/30 rounded-sm flex items-start gap-2">
-                        <span className="text-tp-rust text-xs mt-0.5">⚠</span>
+                        <AlertIcon size={14} className="text-tp-rust mt-0.5 flex-shrink-0" />
                         <p className="text-tp-rust text-xs leading-relaxed">{error}</p>
                     </div>
                 )}

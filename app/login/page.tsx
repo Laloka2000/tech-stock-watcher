@@ -24,7 +24,7 @@ export default function LoginPage() {
         setLoading(false);
 
         if (error) {
-            setError("Wrong email or password.");
+            setError("Incorrect email or password.");
             return;
         }
 
@@ -36,10 +36,10 @@ export default function LoginPage() {
         <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
             <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
                 <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
-                    Login
+                    Log in
                 </h1>
                 <p className="text-[13px] text-tp-ink2 mb-6">
-                    TechPulse - Login to access your watchlist
+                    Log in to access your watchlist.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -61,7 +61,7 @@ export default function LoginPage() {
 
                     <div>
                         <label htmlFor="password" className="block text-[11px] text-tp-ink2 mb-1.5">
-                            Jelszó
+                            Password
                         </label>
                         <input
                             id="password"
@@ -86,20 +86,20 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Login..." : "Login"}
+                        {loading ? "Logging in…" : "Log in"}
                     </button>
                 </form>
 
                 <p className="text-[13px] text-tp-ink2 mt-6 text-center">
-                    Don't have an account yet?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/register" className="text-tp-teal hover:underline">
-                        Register
+                        Create one
                     </Link>
                 </p>
 
                 <p className="text-[13px] text-tp-ink2 mt-3 text-center">
                     <Link href="/" className="inline-flex items-center gap-1.5 hover:text-tp-ink">
-                        <ArrowLeftIcon size={12} /> Back as guest
+                        <ArrowLeftIcon size={12} /> Continue as guest
                     </Link>
                 </p>
             </div>

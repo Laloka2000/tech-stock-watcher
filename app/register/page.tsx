@@ -21,11 +21,11 @@ export default function RegisterPage() {
         setError(null);
 
         if (password.length < MIN_PASSWORD_LENGTH) {
-            setError(`A jelszónak legalább ${MIN_PASSWORD_LENGTH} karakter hosszúnak kell lennie.`);
+            setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
             return;
         }
         if (password !== confirmPassword) {
-            setError("A két jelszó nem egyezik.");
+            setError("Passwords don't match.");
             return;
         }
 
@@ -58,11 +58,11 @@ export default function RegisterPage() {
                         <CheckIcon size={18} />
                     </div>
                     <h1 className="font-serif text-lg font-semibold text-tp-ink mb-2">
-                        Check your emails
+                        Check your email
                     </h1>
                     <p className="text-[13px] text-tp-ink2">
-                        We sent a confirmation link to your <span className="text-tp-ink">{email}</span> account(s).
-                        To active your account, click to the link.
+                        We sent a confirmation link to <span className="text-tp-ink">{email}</span>.
+                        Click it to activate your account.
                     </p>
                     <Link
                         href="/login"
@@ -79,7 +79,7 @@ export default function RegisterPage() {
         <div className="flex h-screen items-center justify-center bg-tp-paper px-4">
             <div className="w-full max-w-sm bg-tp-surf border border-tp-line rounded-sm p-8">
                 <h1 className="font-serif text-xl font-semibold text-tp-ink mb-1">
-                    Registration
+                    Create an account
                 </h1>
                 <p className="text-[13px] text-tp-ink2 mb-6">
                     Create an account for persistent watchlists and alerts
@@ -121,7 +121,7 @@ export default function RegisterPage() {
 
                     <div>
                         <label htmlFor="confirmPassword" className="block text-[11px] text-tp-ink2 mb-1.5">
-                            Confirm Password
+                            Confirm password
                         </label>
                         <input
                             id="confirmPassword"
@@ -146,14 +146,14 @@ export default function RegisterPage() {
                         disabled={loading}
                         className="w-full bg-tp-teal text-tp-surf font-mono text-sm font-semibold rounded-sm py-2.5 hover:bg-tp-teal/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Registration..." : "Registration"}
+                        {loading ? "Creating account…" : "Create account"}
                     </button>
                 </form>
 
                 <p className="text-[13px] text-tp-ink2 mt-6 text-center">
                     Already have an account?{" "}
                     <Link href="/login" className="text-tp-teal hover:underline">
-                        Login
+                        Log in
                     </Link>
                 </p>
             </div>

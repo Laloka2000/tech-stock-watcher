@@ -45,7 +45,7 @@ export function AuthStatus() {
                 href="/login"
                 className="text-xs font-mono text-tp-ink2 hover:text-tp-teal border border-tp-line hover:border-tp-teal/40 rounded-sm px-3 py-1.5 transition-colors"
             >
-                Bejelentkezés
+                Log in
             </Link>
         );
     }
@@ -59,7 +59,7 @@ export function AuthStatus() {
                 onClick={handleSignOut}
                 className="text-xs font-mono text-tp-ink2 hover:text-tp-rust border border-tp-line hover:border-tp-rust/40 rounded-sm px-3 py-1.5 transition-colors"
             >
-                Kijelentkezés
+                Log out
             </button>
         </div>
     );

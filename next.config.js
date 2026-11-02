@@ -7,7 +7,8 @@ const withPWA = require('next-pwa')({
     disable: process.env.NODE_ENV === "development",
     runtimeCaching: [
         {
-            urlPattern: /^\/api\/quotes/,
+            // Workbox matches against the full URL, so test the pathname instead
+            urlPattern: ({ url }) => url.pathname.startsWith("/api/quotes"),
             handler: "NetworkFirst",
             options: {
                 cacheName: "quotes-cache",
@@ -15,7 +16,7 @@ const withPWA = require('next-pwa')({
             },
         },
         {
-            urlPattern: /^\/api\/(chart|profile)/,
+            urlPattern: ({ url }) => /^\/api\/(chart|profile)/.test(url.pathname),
             handler: "CacheFirst",
             options: {
                 cacheName: "fundamentals-cache",

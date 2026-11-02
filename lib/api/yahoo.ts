@@ -21,7 +21,7 @@ const YAHOO_RANGE: Record<ChartRange, string> = {
 interface YahooChartResponse {
     chart: {
         result?: Array<{
-            timestamp: number[];
+            timestamp?: number[];
             indicators: {
                 quote: Array<{
                     open: (number | null)[];
@@ -72,7 +72,9 @@ export async function fetchDailyChart(
     if (!result) throw new Error(`Yahoo Finance: nincs adat ${ticker}-hez`);
 
     const { timestamp, indicators } = result;
-    const quote = indicators.quote[0];
+    const quote = indicators?.quote?.[0];
+    // Delisted / untraded symbols come back with meta only (no timestamp or OHLC arrays)
+    if (!timestamp || !quote?.close) return [];
     const points: ChartPoint[] = [];
 
     for (let i = 0; i < timestamp.length; i++) {

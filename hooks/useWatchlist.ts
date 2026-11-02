@@ -34,7 +34,8 @@ export function useWatchlist() {
     // Hydrate from localStorage aftwe mount (avoids SSR mishmatch)
     useEffect(() => {
         const storedInfo = readStorage();
-        if (storedInfo && storedInfo.length > 0){
+        // An empty array is a deliberately emptied watchlist - only seed when nothing is stored
+        if (storedInfo){
             setEntries(storedInfo);
         } else {
             //seed defaults on first visit

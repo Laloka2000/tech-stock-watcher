@@ -1,6 +1,11 @@
 "use client";
 import type { Sentiment } from "@/types/stock";
-import { TriangleUpIcon, TriangleDownIcon } from "./icons";
+import {
+  TriangleUpIcon,
+  TriangleDownIcon,
+  CheckIcon,
+  CloseIcon,
+} from "./icons";
 
 interface BadgeProps {
   sentiment: Sentiment;
@@ -90,6 +95,48 @@ export function MetricCardSkeleton() {
     <div className="border border-tp-line bg-tp-surf rounded-sm px-4 py-3 flex-1">
       <Skeleton className="h-2 w-16 mb-3" />
       <Skeleton className="h-5 w-20" />
+    </div>
+  );
+}
+
+interface ToastProps {
+  message: string;
+  tone?: "teal" | "rust";
+  actionLabel?: string;
+  onAction?: () => void;
+  onClose: () => void;
+}
+
+export function Toast({
+  message,
+  tone = "teal",
+  actionLabel,
+  onAction,
+  onClose,
+}: ToastProps) {
+  const color = tone === "teal" ? "text-tp-teal" : "text-tp-rust";
+  return (
+    <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 pointer-events-none">
+      <div
+        role="status"
+        aria-live="polite"
+        className="pointer-events-auto w-full max-w-sm flex items-center gap-3 bg-tp-surf border border-tp-line rounded-sm px-4 py-3 animate-slide-in">
+        <CheckIcon size={16} className={`flex-shrink-0 ${color}`} />
+        <p className="flex-1 text-[13px] text-tp-ink">{message}</p>
+        {actionLabel && onAction && (
+          <button
+            onClick={onAction}
+            className="text-[13px] font-semibold text-tp-teal hover:underline flex-shrink-0">
+            {actionLabel}
+          </button>
+        )}
+        <button
+          onClick={onClose}
+          aria-label="Dismiss"
+          className="text-tp-ink2 hover:text-tp-ink flex-shrink-0">
+          <CloseIcon size={12} />
+        </button>
+      </div>
     </div>
   );
 }

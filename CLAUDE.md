@@ -54,15 +54,14 @@ tokens:
 
 ## Gotchas / incomplete work
 
-- **Supabase auth is mid-implementation.** `middleware.ts`, `app/login`, `app/register`,
-  `app/auth/callback`, and `components/auth/AuthStatus.tsx` exist and expect
-  `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local`. **These are not
-  currently set** — only `FINNHUB_API_KEY` is. Without them, `middleware.ts` throws on every request
-  and the dev server 500s on all routes. If you need to run the app locally and don't have real
-  Supabase credentials, you can temporarily add syntactically-valid placeholder values to
-  `.env.local` (it's gitignored) to get past the "URL and Key are required" throw — but
-  `supabase.auth.getUser()` will still fail against a fake backend, so login/register won't actually
-  work, only the rest of the UI will render.
+- **Backend v2 roadmap**: [docs/plans/backend-v2-plan.md](docs/plans/backend-v2-plan.md) (Hungarian, gitignored / local-only) is the agreed
+  architecture plan for accounts, DB-backed watchlist, alerts and push/in-app notifications on
+  Supabase, with a 5-phase rollout and a security section. Follow it when building backend features.
+- **Supabase auth is mid-implementation (rollout phase 1).** `middleware.ts`, `app/login`,
+  `app/register`, `app/auth/callback`, and `components/auth/AuthStatus.tsx` exist and expect
+  `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local`. As of
+  2026-11 both are set in `.env.local` (verify they're real, not placeholders, before debugging
+  auth). Without them, `middleware.ts` throws on every request and the dev server 500s on all routes.
 - Some auth-page copy (`app/login`, `app/register`) is in Hungarian while the rest of the app is in
   English. This was pre-existing/intentional as of the last touch — don't "fix" the language without
   asking, only restyle if touching those files.

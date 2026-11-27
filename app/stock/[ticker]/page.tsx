@@ -65,6 +65,7 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
     message: string;
     tone: "teal" | "rust";
     undo?: boolean;
+    error?: boolean;
   } | null>(null);
 
   useEffect(() => {
@@ -73,17 +74,25 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
     return () => clearTimeout(id);
   }, [toast]);
 
-  function toggleWatchlist() {
+  async function toggleWatchlist() {
     if (inList) {
-      removeTickers(ticker);
-      setToast({
-        message: `${ticker} removed from watchlist`,
-        tone: "rust",
-        undo: true,
-      });
+      const result = await removeTickers(ticker);
+      setToast(
+        result.ok
+          ? {
+              message: `${ticker} removed from watchlist`,
+              tone: "rust",
+              undo: true,
+            }
+          : { message: result.error, tone: "rust", error: true },
+      );
     } else {
-      addTickers(ticker);
-      setToast({ message: `${ticker} added to watchlist`, tone: "teal" });
+      const result = await addTickers(ticker);
+      setToast(
+        result.ok
+          ? { message: `${ticker} added to watchlist`, tone: "teal" }
+          : { message: result.error, tone: "rust", error: true },
+      );
     }
   }
 
@@ -407,10 +416,14 @@ export default function StockPage({ params }: { params: { ticker: string } }) {
         <Toast
           message={toast.message}
           tone={toast.tone}
+          icon={toast.error ? "alert" : "check"}
           actionLabel={toast.undo ? "Undo" : undefined}
-          onAction={() => {
-            addTickers(ticker);
+          onAction={async () => {
             setToast(null);
+            const result = await addTickers(ticker);
+            if (!result.ok) {
+              setToast({ message: result.error, tone: "rust", error: true });
+            }
           }}
           onClose={() => setToast(null)}
         />

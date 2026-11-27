@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useSWR from "swr";
 import type { WatchlistEntry } from "@/types/stock";
-import { normalizeTicker } from "@/lib/validation";
+import { normalizeTicker, WATCHLIST_LIMIT } from "@/lib/validation";
 import { useUser } from "./useUser";
 
 const storage_key = "tp_watchlist";
@@ -182,11 +182,12 @@ export function useWatchlist()
 
         if (!userId)
         {
-            setLocalEntries((prev) =>
-                prev.some((e) => e.ticker === ticker)
-                    ? prev
-                    : [...prev, { ticker, addedAt: new Date().toISOString() }]
-            );
+            if (localEntries.some((e) => e.ticker === ticker)) return { ok: true };
+            if (localEntries.length >= WATCHLIST_LIMIT)
+            {
+                return { ok: false, error: `Watchlist limit reached (max ${WATCHLIST_LIMIT})` };
+            }
+            setLocalEntries((prev) => [...prev, { ticker, addedAt: new Date().toISOString() }]);
             return { ok: true };
         }
 
@@ -222,7 +223,7 @@ export function useWatchlist()
         {
             return { ok: false, error: err instanceof Error ? err.message : "Failed to add ticker" };
         }
-    }, [userId, mutate]);
+    }, [userId, localEntries, mutate]);
 
 
     const removeTickers = useCallback(async (input: string): Promise<WatchlistResult> =>

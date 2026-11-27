@@ -5,6 +5,7 @@ import {
   TriangleDownIcon,
   CheckIcon,
   CloseIcon,
+  AlertIcon,
 } from "./icons";
 
 interface BadgeProps {
@@ -102,6 +103,7 @@ export function MetricCardSkeleton() {
 interface ToastProps {
   message: string;
   tone?: "teal" | "rust";
+  icon?: "check" | "alert";
   actionLabel?: string;
   onAction?: () => void;
   onClose: () => void;
@@ -110,18 +112,20 @@ interface ToastProps {
 export function Toast({
   message,
   tone = "teal",
+  icon = "check",
   actionLabel,
   onAction,
   onClose,
 }: ToastProps) {
   const color = tone === "teal" ? "text-tp-teal" : "text-tp-rust";
+  const Icon = icon === "alert" ? AlertIcon : CheckIcon;
   return (
     <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 pointer-events-none">
       <div
-        role="status"
-        aria-live="polite"
+        role={icon === "alert" ? "alert" : "status"}
+        aria-live={icon === "alert" ? "assertive" : "polite"}
         className="pointer-events-auto w-full max-w-sm flex items-center gap-3 bg-tp-surf border border-tp-line rounded-sm px-4 py-3 animate-slide-in">
-        <CheckIcon size={16} className={`flex-shrink-0 ${color}`} />
+        <Icon size={16} className={`flex-shrink-0 ${color}`} />
         <p className="flex-1 text-[13px] text-tp-ink">{message}</p>
         {actionLabel && onAction && (
           <button

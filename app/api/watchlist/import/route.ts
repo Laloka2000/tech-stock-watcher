@@ -75,7 +75,7 @@ export async function POST(req: NextRequest)
     if (error)
     {
         // Another tab just finished copying -> the goal has already been met
-        if (error.code === "23505") return ({ imported: 0, reason: "not_empty" });
+        if (error.code === "23505") return json({ imported: 0, reason: "not_empty" });
         console.error("[POST /api/watchlist/import] insert", error);
         return json({ error: "Failed to import watchlist" }, 500);
     }

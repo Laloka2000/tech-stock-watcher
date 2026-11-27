@@ -134,7 +134,7 @@ export function useWatchlist()
 
     // Logged-in mode: DB via /api/watchlist 
     const { data, error, mutate } = useSWR<WatchlistResponse, Error, [string, string] | null>(
-        userId ? ["api/watchlist", userId] : null,
+        userId ? ["/api/watchlist", userId] : null,
         fetchWatchlist,
     );
 

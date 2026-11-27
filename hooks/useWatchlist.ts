@@ -36,6 +36,41 @@ function writeStorage(entries: WatchlistEntry[]): void
     }
 }
 
+const import_flag_prefix = "tp_watchlist_imported:";
+
+function readFlag(key: string): boolean
+{
+    try
+    {
+        return localStorage.getItem(key) !== null;
+    } catch
+    {
+        return false;
+    }
+}
+
+function writeFlag(key: string): void
+{
+    try
+    {
+        localStorage.setItem(key, new Date().toISOString());
+    } catch
+    {
+        /* ignore */;
+    }
+}
+
+function clearFlag(key: string): void
+{
+    try
+    {
+        localStorage.removeItem(key);
+    } catch
+    {
+        /* ignore */
+    }
+}
+
 type WatchlistResponse = { entries: WatchlistEntry[] };
 
 export type WatchlistResult = { ok: true } | { ok: false; error: string };
@@ -109,6 +144,35 @@ export function useWatchlist()
     );
 
     const hydrated = !userLoading && (userId ? data !== undefined || error !== undefined : localHydrated);
+
+    useEffect(() =>
+    {
+        if (!userId || !localHydrated || data === undefined) return;
+
+        const flagKey = `${import_flag_prefix}${userId}`;
+        if (readFlag(flagKey)) return;
+
+        writeFlag(flagKey);
+
+        if (data.entries.length > 0 || localEntries.length === 0) return;
+
+        fetch("/api/watchlist/import", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tickers: localEntries.map((e) => e.ticker) }),
+        })
+            .then((res) =>
+            {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return mutate();
+            })
+            .catch((err) =>
+            {
+                console.error("[useWatchlist] import failed", err);
+                clearFlag(flagKey);
+            });
+    }, [userId, localHydrated, data, localEntries, mutate]);
+
     const tickers = entries.map((e) => e.ticker);
 
     const addTickers = useCallback(async (input: string): Promise<WatchlistResult> =>

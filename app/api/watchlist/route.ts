@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { normalizeTicker } from "@/lib/validation";
 import type { WatchlistEntry } from "@/types/stock";
+import { json, getAuthedClient, NO_STORE } from "@/lib/api/route-utils";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const NO_STORE = { "Cache-Control": "private, no-store" };
-
-function json(body: unknown, status = 200)
-{
-    return NextResponse.json(body, { status, headers: NO_STORE });
-}
-
-async function getAuthedClient()
-{
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    return { supabase, user };
-}
 
 type WatchlistRow = { ticker: string; added_at: string };
 

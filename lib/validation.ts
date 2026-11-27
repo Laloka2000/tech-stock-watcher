@@ -1,5 +1,6 @@
 export const TICKER_PATTERN = /^[A-Z]{1,5}$/;
 
+export const WATCHLIST_LIMIT = 20;
 
 /**
  * Converts any input into a valid ticker, or returns null.
